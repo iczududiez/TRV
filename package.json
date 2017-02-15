@@ -1,0 +1,34 @@
+{
+  "name": "trv",
+  "version": "1.0.0",
+  "description": "desenvolvimento de uma pagina baseada em um layout",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iczududiez/TRV.git"
+  },
+  "author": "Rafael Almeida Santos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iczududiez/TRV/issues"
+  },
+  "homepage": "https://github.com/iczududiez/TRV#readme",
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.22.2",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-react": "^6.22.0",
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "axios": "^0.15.3",
+    "express": "^4.14.1",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  }
+}
