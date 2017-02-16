@@ -21,7 +21,7 @@ const Filtro = React .createClass({
                     <label htmlFor="chkFutebolSociety">Cano Alto</label>
                 </div>
                 <div>
-                    <button>Todos os produtos</button>
+                    <a href="#" className="btn btn-default">Todos os produtos</a>
                 </div>
             </div>
         )
