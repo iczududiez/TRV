@@ -1,7 +1,6 @@
 import React from 'react';
 import Filtro from './Filtro';
 import ShowCase from './ShowCase';
-import Footer from './Footer';
 import ProductService from '../../service/ProductService';
 
 const Body = React.createClass({
@@ -30,11 +29,10 @@ const Body = React.createClass({
         }.bind(this));
 
         return(
-            <div className="container">
+            <section>
                 <Filtro />
                 {showCases}
-                <Footer />
-            </div>
+            </section>
         )
     }
 });

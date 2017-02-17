@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = {
     entry: './client/client.js',
     output:{
@@ -14,6 +16,11 @@ module.exports = {
                 query:{
                     presets:['react']
                 }
+            },{
+                test: /\.css$/,loader: "style-loader!css-loader",
+                //test: /\.css$/,
+                //loaders: ['css-loader', 'style-loader'],
+                //include: __dirname + '/public/cssSASS/'
             }
         ]
     }

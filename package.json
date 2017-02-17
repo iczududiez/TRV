@@ -27,8 +27,12 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "css-loader": "^0.26.1",
     "express": "^4.14.1",
+    "node-sass": "^4.5.0",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "sass-loader": "^6.0.0",
+    "style-loader": "^0.13.1"
   }
 }
