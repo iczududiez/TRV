@@ -21,7 +21,28 @@ module.exports = {
                 //test: /\.css$/,
                 //loaders: ['css-loader', 'style-loader'],
                 //include: __dirname + '/public/cssSASS/'
+            },
+            {
+                test: /.*\.(gif|png|jpe?g|svg)$/i,
+                loaders: [
+                    'file-loader',
+                    {
+                        loader: 'image-webpack-loader',
+                        query: {
+                            progressive: true,
+                            pngquant: {
+                                quality: '0-90',
+                                speed: 4
+                            }
+                        }
+                    }
+                ],
+                include: path.resolve('./public/image')
             }
+            /*{
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                loader:'url-loader?limit=200000'
+            }*/
         ]
     }
 

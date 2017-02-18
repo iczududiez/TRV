@@ -9,17 +9,17 @@ const ShowCase = React.createClass({
         var carroselControl = [];
 
         for(var i = 0, v = this.props.products.length - 4; i < v; i++){
-            carroselControl.push(<span key={i}>°</span>);
+            carroselControl.push(<span key={i} className={!i ? "item-control bullet active" : "item-control bullet"}></span>);
         }
 
         return(
-            <div className="row">
+            <div className="container container-noFlex">
                 <h3>{UtilResource.translate[this.props.name]}</h3>
                 <div className="carrosel">
                     <Products products={this.props.products}/>
-                    <div>
+                    <menu className="carrosel-control">
                         {carroselControl}
-                    </div>
+                    </menu>
                 </div>
             </div>
         )

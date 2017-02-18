@@ -1,42 +1,391 @@
 @charset "UTF-8";
+/*responsive* /
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
 
-//Parte 02 - include
-@import "reset";
+/* RESET CSS */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {margin: 0;padding: 0;border: 0;font-size: 100%;font: inherit;vertical-align: baseline;}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, div, figcaption, figure, footer, header, hgroup, menu, nav, section {display: block; box-sizing: border-box;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;}
+body {line-height: 1;}
+ol, ul {list-style: none;}
+blockquote, q {quotes: none;}
+blockquote:before, blockquote:after,
+q:before, q:after {content: '';content: none;}
+table {border-collapse: collapse;border-spacing: 0;}
+/* RESET CSS */ 
 
+/** Variaveis **/
+$fontFamily: 'Roboto','sans serif';
+$baseSite: 1600;
+$baseContainer: 1600 - 320;
+$fontBase: 16px;
+$paddingBase: 120;
+$smallColumnBase: 40;
+$largeColumnBase: 70;
+$lineBase: 25;
 
-
-// Definindo variaveis
-$alert-color: blue;
-$info-color: red;
-
-//Parte 01 - Encadeamento
-#header{
-    background-color: #cdcdcd;
-    font-size:0.67rem;
-    color: $alert-color;
-
-    p{
-        font-size: 16px;
-        &:hover{
-            color: $info-color;
-        }
-    }
-}
-
-//Parte 03 - Mixin
-@mixin position($value){
-    display:block;
-    margin-left: $value;
-    margin-right: $value;
-}
-
-#section{
-    @include position(10px);
-}
+/** Mixin **/
+@mixin fontSize($size: 24, $base: 16){
+    font-size: $size + px;
+    font-size: ($size/$base) * 1rem;}
 
 @mixin fontSize($size: 24, $base: 16){
     font-size: $size + px;
-    font-size: ($size/$base) * 1rem;
+    font-size: ($size/$base) * 1rem;}
+
+@mixin columnDefinition($numbersSmallColumn: 0, $numbersLargeColumns:0, $propertyName: width){
+    #{$propertyName}: unquote((((($smallColumnBase / $baseContainer) * 100) * $numbersSmallColumn) + ((($largeColumnBase / $baseContainer) * 100) * $numbersLargeColumns)) + '%');}
+
+@mixin lineDefinition($propertyName,$numberLines : 1){
+    #{$propertyName}: unquote(($lineBase / $baseSite) * 100 + '%');}
+
+@mixin borderRadius($value){
+    -webkit-border-radius:$value;
+    -moz-border-radius:$value;
+    border-radius:$value;}
+
+@mixin transformScale($value){
+    -ms-transform: rotate($value);
+    -webkit-transform: scale($value);
+    -moz-transform: scale($value);
+    transform: scale($value);}
+
+@mixin displayInlineBlock(){
+    display: inline-block;
+    /* IE Hack*/
+    *zoom:1;
+    *display:inline;
 }
+
+/** ELEMENTS **/
+a{
+    text-decoration: none;
+    color:#000;
+    cursor:pointer;}
+
+nav .vertical{
+	display:flex;
+	flex-direction:row;}
+
+
+/* HEADER */
+header .item-Header {
+    @include lineDefinition(padding-top, numberLines);
+    @include lineDefinition(padding-bottom, numberLines);}
+
+header .logo{
+    @include columnDefinition(1, 1);
+    @include columnDefinition(1, 0, padding-right);}
+
+header .nav-bar{
+    @include columnDefinition(10, 10);
+    @include fontSize(14);
+    display: flex;
+    align-items: center;}
+
+header .nav-bar ul {
+    display: flex;
+    align-items: center;}
+
+
+header .nav-bar ul li {
+    margin-right: 4%;}
+
+header .cart{
+    @include columnDefinition(1, 1);
+    @include columnDefinition(1, 0, padding-left);}
+
+header .cart img{
+    /*width: $largeColumnBase * 0.75 + px;*/
+    height: $lineBase * 1.5 + px;
+    margin:0px $largeColumnBase * 0.25 + px;}
+/* HEADER */
+
+/* FOOTER */
+footer .footer-menu {
+    color: #000;
+    z-index: 1;
+    position: absolute;
+    top: 40%;
+    left: 0px;
+    width: 100%;
+    text-align: center;}
+
+footer .footer-menu p{
+    @include fontSize(72);
+    color:#fff;
+    font-weight: 900;}
+
+footer .footer-menu a.btn{
+    margin-top: 20px;
+    left: unquote((((1324.56 - 175) * 0.5) / 1324.56) * 100 + '%')}
+
+footer .copyright{
+    height: $lineBase + px;
+    color:#999999;
+    text-align: center;
+    font-weight: normal;
+    margin-top:$lineBase+px;}
+/* FOOTER */
+
+/** ID, CLASSES AND SELECTORS**/
+:root{
+    font-size: $fontBase;}
+
+#app{
+    width: 100%;
+    max-width: 1600px;
+    margin-left:auto;
+    margin-right:auto;
+    padding:0 unquote((($paddingBase / $baseSite) * 100) + '%');
+    font-family: $fontFamily;
+    @include fontSize(16);
+    font-weight: bold;
+}
+
+.container{
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
+    padding:0 2.5%;
+    display:flex;
+    position: relative;}
+
+.container-padLine1-3{
+    padding-top: $lineBase + px;
+    padding-bottom: $lineBase * 3 + px;}
+
+.container-noFlex{
+    display:block;}
+
+.row {
+    margin-left:-5px;
+    margin-right:-5px;
+    position: relative;
+    &:before{
+       content: "";
+        display:table;
+    }
+    &:after{
+        content: "";
+        display:table;
+        clear:both;
+    }}
+
+a.btn {
+    display: block;
+    color: #fff;
+    background: #313131;
+    padding: 15px;
+    @include fontSize(13);
+    @include borderRadius(4px);
+    text-align: center;
+    position: relative;}
+
+a.btn-default{
+    max-width: 145px;
+    min-width: 145px;}
+
+a.btn-buy{
+    text-align:center;
+    margin-top:20px;
+    background:#ff5c2b;}
+
+.bullet{
+    @include displayInlineBlock();
+    width: 9px;
+    height: 9px;
+    background: #a1a1a1;
+    margin:0px 5px;
+    cursor: pointer;
+    @include borderRadius(10px);}
+
+.banner{
+    margin-left: - $paddingBase + px;}
+
+/* BODY */
+
+/* BODY >> FILTER */
+.filter{
+    display: flex;
+    align-items: center;
+    height: $lineBase * 3 + px;
+    @include fontSize(18);}
+
+.filter-title{
+    @include columnDefinition(2, 2);}
+
+.item-filter{
+    width: 20%;}
+
+
+.filter-options{
+    @include columnDefinition(8, 8);
+    @include fontSize(16);
+    color:#999}
+
+.filter-options menu{
+    width: 100%}
+
+.filter-options ul{
+    display: flex;
+    align-items: center;}
+
+.filter-options input[type="checkbox"]{
+    height: 15px;
+    margin-right: 15px;}
+/* BODY >> FILTER */
+
+/* BODY >> PRODUCTS */
+.products{
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;}
+
+.product{
+    width: 22%;
+    padding: 2% 3% 0%;
+    margin-right:3%;
+    text-align: center;}
+
+.product:hover > .details{
+    margin-top:-20px}
+
+.product:hover > .details   > a.btn{
+    visibility: visible;}    
+
+.product .details{
+    text-align:left;}
+
+.product .details a.person{
+    @include fontSize(12);
+    width:100%;
+    display:block;
+    color:#666666;
+    &:before{
+        content: '';
+        @include displayInlineBlock();
+        width:16px;
+        height:16px;
+        background: url('http://www.raphaelfabeni.com.br/rv/images/personalize.jpg');
+        /* cut margin inline */
+        margin-bottom: -3px;
+        margin-right: 5px;
+        
+    }}
+
+.product .details span{
+    display:block;
+    margin-top:10px;
+    @include fontSize(14);}
+
+.product .details span.describle{
+    font-weight:normal;
+    color:#999;}
+
+.product .details span.price{
+    @include fontSize(16);
+    color:#666666;}
+
+.product .details span.times{
+    @include fontSize(14);
+    font-weight:normal;
+    color:#666666;}
+
+.product .details a.btn{
+    visibility: hidden;}
+/* BODY >> PRODUCTS */
+
+/* BODY >> CARROSEL */
+.carrosel .carrosel-control{
+    width: 100%;
+    height:  $lineBase + px;
+    @include displayInlineBlock();
+    text-align: center;}
+
+
+.carrosel .carrosel-control .item-control{
+    vertical-align: middle;
+    background: #d1d1d1;}
+
+.carrosel .carrosel-control .item-control.active{
+    background: #a1a1a1;}
+
+/* BODY >> CARROSEL */
+
+/* BODY */
+
+/* MEDIA */
+@media (max-width: 1340px){
+    #app{
+        padding:0;}
+
+    .item-filter span{
+        display: inline-block;
+        width: 65%;}
+}
+
+
+@media (max-width: 972px){
+    .item-filter{
+        width:25%}
+}
+/* MEDIA */
+
+/* https://codepen.io/bbodine1/pen/novBm */
+.squaredTwo {
+    height: 20px;
+    position: relative;
+    background: #fff;
+    input[type=checkbox] {
+        visibility: hidden;
+        &:checked + label:after {
+            opacity: 1;
+        } 
+    }
+    label {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        background: #fff;
+        border: 1px solid #ccc;
+        &:after {
+            content: '';
+            width: 9px;
+            height: 5px;
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            border: 3px solid #333;
+            border-top: none;
+            border-right: none;
+            background: transparent;
+            opacity: 0;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }
+        &:hover::after {
+            opacity: 0.3;
+        }
+    }}
 
 

@@ -1,18 +1,23 @@
 import React from 'react';
+import path from 'path';
+import banner from '../../public/image/banner-footer.png';
 
 //Stateless
 function Footer(){
     return (
         <footer>
             <div className="row">
-                <div className="image-banner">
-                    <p>JUST DO IT.</p>
-                    <a href="#" className="btn btn-default">Todos os produtos</a>
+                    <div className="banner">
+                        <img src={banner} alt="Banner JUST DO IT."/>
+                    </div>
+                    <div className="footer-menu">
+                        <p>JUST DO IT.</p>
+                        <a className="btn btn-default btn-footer">TODOS OS PRODUTOS</a>
+                    </div>
                 </div>
-            </div>
-            <div className="row">
-                <p>Nike Copyright 2017 - all rights reserved</p>
-            </div>
+                <div className="copyright">
+                    <p>Nike Copyright 2017 - all rights reserved</p>
+                </div>
         </footer>
     )
 }

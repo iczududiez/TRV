@@ -1,3 +1,4 @@
+/*responsive* /
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -7,7 +8,7 @@ html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt,
+small, strike, strong, sub, sup, tt, var,
 b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
@@ -24,8 +25,11 @@ time, mark, audio, video {
   vertical-align: baseline; }
 
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
-  display: block; }
+article, aside, details, div, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box; }
 
 body {
   line-height: 1; }
@@ -46,18 +50,323 @@ table {
   border-spacing: 0; }
 
 /* RESET CSS */
-#header {
-  background-color: #cdcdcd;
-  font-size: 0.67rem;
-  color: blue; }
-  #header p {
-    font-size: 16px; }
-    #header p:hover {
-      color: red; }
+/** Variaveis **/
+/** Mixin **/
+/** ELEMENTS **/
+a {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer; }
 
-#section {
+nav .vertical {
+  display: flex;
+  flex-direction: row; }
+
+/* HEADER */
+header .item-Header {
+  padding-top: 1.5625%;
+  padding-bottom: 1.5625%; }
+
+header .logo {
+  width: 8.59375%;
+  padding-right: 3.125%; }
+
+header .nav-bar {
+  width: 85.9375%;
+  font-size: 14px;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center; }
+
+header .nav-bar ul {
+  display: flex;
+  align-items: center; }
+
+header .nav-bar ul li {
+  margin-right: 4%; }
+
+header .cart {
+  width: 8.59375%;
+  padding-left: 3.125%; }
+
+header .cart img {
+  /*width: $largeColumnBase * 0.75 + px;*/
+  height: 37.5px;
+  margin: 0px 17.5px; }
+
+/* HEADER */
+/* FOOTER */
+footer .footer-menu {
+  color: #000;
+  z-index: 1;
+  position: absolute;
+  top: 40%;
+  left: 0px;
+  width: 100%;
+  text-align: center; }
+
+footer .footer-menu p {
+  font-size: 72px;
+  font-size: 4.5rem;
+  color: #fff;
+  font-weight: 900; }
+
+footer .footer-menu a.btn {
+  margin-top: 20px;
+  left: 43.39403%; }
+
+footer .copyright {
+  height: 25px;
+  color: #999999;
+  text-align: center;
+  font-weight: normal;
+  margin-top: 25px; }
+
+/* FOOTER */
+/** ID, CLASSES AND SELECTORS**/
+:root {
+  font-size: 16px; }
+
+#app {
+  width: 100%;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 7.5%;
+  font-family: "Roboto", "sans serif";
+  font-size: 16px;
+  font-size: 1rem;
+  font-weight: bold; }
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2.5%;
+  display: flex;
+  position: relative; }
+
+.container-padLine1-3 {
+  padding-top: 25px;
+  padding-bottom: 75px; }
+
+.container-noFlex {
+  display: block; }
+
+.row {
+  margin-left: -5px;
+  margin-right: -5px;
+  position: relative; }
+  .row:before {
+    content: "";
+    display: table; }
+  .row:after {
+    content: "";
+    display: table;
+    clear: both; }
+
+a.btn {
   display: block;
-  margin-left: 10px;
-  margin-right: 10px; }
+  color: #fff;
+  background: #313131;
+  padding: 15px;
+  font-size: 13px;
+  font-size: 0.8125rem;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  text-align: center;
+  position: relative; }
+
+a.btn-default {
+  max-width: 145px;
+  min-width: 145px; }
+
+a.btn-buy {
+  text-align: center;
+  margin-top: 20px;
+  background: #ff5c2b; }
+
+.bullet {
+  display: inline-block;
+  /* IE Hack*/
+  *zoom: 1;
+  *display: inline;
+  width: 9px;
+  height: 9px;
+  background: #a1a1a1;
+  margin: 0px 5px;
+  cursor: pointer;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px; }
+
+.banner {
+  margin-left: -120px; }
+
+/* BODY */
+/* BODY >> FILTER */
+.filter {
+  display: flex;
+  align-items: center;
+  height: 75px;
+  font-size: 18px;
+  font-size: 1.125rem; }
+
+.filter-title {
+  width: 17.1875%; }
+
+.item-filter {
+  width: 20%; }
+
+.filter-options {
+  width: 68.75%;
+  font-size: 16px;
+  font-size: 1rem;
+  color: #999; }
+
+.filter-options menu {
+  width: 100%; }
+
+.filter-options ul {
+  display: flex;
+  align-items: center; }
+
+.filter-options input[type="checkbox"] {
+  height: 15px;
+  margin-right: 15px; }
+
+/* BODY >> FILTER */
+/* BODY >> PRODUCTS */
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative; }
+
+.product {
+  width: 22%;
+  padding: 2% 3% 0%;
+  margin-right: 3%;
+  text-align: center; }
+
+.product:hover > .details {
+  margin-top: -20px; }
+
+.product:hover > .details > a.btn {
+  visibility: visible; }
+
+.product .details {
+  text-align: left; }
+
+.product .details a.person {
+  font-size: 12px;
+  font-size: 0.75rem;
+  width: 100%;
+  display: block;
+  color: #666666; }
+  .product .details a.person:before {
+    content: '';
+    display: inline-block;
+    /* IE Hack*/
+    *zoom: 1;
+    *display: inline;
+    width: 16px;
+    height: 16px;
+    background: url("http://www.raphaelfabeni.com.br/rv/images/personalize.jpg");
+    /* cut margin inline */
+    margin-bottom: -3px;
+    margin-right: 5px; }
+
+.product .details span {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  font-size: 0.875rem; }
+
+.product .details span.describle {
+  font-weight: normal;
+  color: #999; }
+
+.product .details span.price {
+  font-size: 16px;
+  font-size: 1rem;
+  color: #666666; }
+
+.product .details span.times {
+  font-size: 14px;
+  font-size: 0.875rem;
+  font-weight: normal;
+  color: #666666; }
+
+.product .details a.btn {
+  visibility: hidden; }
+
+/* BODY >> PRODUCTS */
+/* BODY >> CARROSEL */
+.carrosel .carrosel-control {
+  width: 100%;
+  height: 25px;
+  display: inline-block;
+  /* IE Hack*/
+  *zoom: 1;
+  *display: inline;
+  text-align: center; }
+
+.carrosel .carrosel-control .item-control {
+  vertical-align: middle;
+  background: #d1d1d1; }
+
+.carrosel .carrosel-control .item-control.active {
+  background: #a1a1a1; }
+
+/* BODY >> CARROSEL */
+/* BODY */
+/* MEDIA */
+@media (max-width: 1340px) {
+  #app {
+    padding: 0; }
+
+  .item-filter span {
+    display: inline-block;
+    width: 65%; } }
+@media (max-width: 972px) {
+  .item-filter {
+    width: 25%; } }
+/* MEDIA */
+/* https://codepen.io/bbodine1/pen/novBm */
+.squaredTwo {
+  height: 20px;
+  position: relative;
+  background: #fff; }
+  .squaredTwo input[type=checkbox] {
+    visibility: hidden; }
+    .squaredTwo input[type=checkbox]:checked + label:after {
+      opacity: 1; }
+  .squaredTwo label {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background: #fff;
+    border: 1px solid #ccc; }
+    .squaredTwo label:after {
+      content: '';
+      width: 9px;
+      height: 5px;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border: 3px solid #333;
+      border-top: none;
+      border-right: none;
+      background: transparent;
+      opacity: 0;
+      -webkit-transform: rotate(-45deg);
+      -moz-transform: rotate(-45deg);
+      transform: rotate(-45deg); }
+    .squaredTwo label:hover::after {
+      opacity: 0.3; }
 
 /*# sourceMappingURL=style.css.map */

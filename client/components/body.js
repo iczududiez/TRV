@@ -29,9 +29,11 @@ const Body = React.createClass({
         }.bind(this));
 
         return(
-            <section>
-                <Filtro />
-                {showCases}
+            <section className="body">
+                <div className="row">
+                    <Filtro />
+                    {showCases}
+                </div>
             </section>
         )
     }

@@ -5,10 +5,10 @@ const Menu = React.createClass({
         return (
             <nav>
                 <ul>
-                    <li><a href="#">MASCULINO</a></li>
-                    <li><a href="#">FEMININO</a></li>
-                    <li><a href="#">MENINO</a></li>
-                    <li><a href="#">MENINA</a></li>
+                    <li className="nav-bar-item"><a href="#">MASCULINO</a></li>
+                    <li className="nav-bar-item"><a href="#">FEMININO</a></li>
+                    <li className="nav-bar-item"><a href="#">MENINO</a></li>
+                    <li className="nav-bar-item"><a href="#">MENINA</a></li>
                 </ul>
             </nav>
         )

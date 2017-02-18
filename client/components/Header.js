@@ -7,18 +7,24 @@ const Header = React.createClass({
         return (
             <header>
                 <div className="row">
-                    <div>
-                        <img className="tam2-1" src="http://www.raphaelfabeni.com.br/rv/images/nike-logo.png"/>
+                    <div className="container">
+                        <div className="item-Header logo">
+                            <a>
+                                <img src="http://www.raphaelfabeni.com.br/rv/images/nike-logo.png" alt="Logo"/>
+                            </a>
+                        </div>
+                        <div className="item-Header nav-bar">
+                            <Menu />
+                        </div>
+                        <div className="item-Header cart">
+                            <a>
+                                <img src="http://www.raphaelfabeni.com.br/rv/images/cart.png" alt="Cart"/>
+                            </a>
+                        </div>
                     </div>
-                    <div>
-                        <Menu />
+                    <div className="banner">
+                        <img src="http://www.raphaelfabeni.com.br/rv/images/banner.png" alt="Main Banner"/>
                     </div>
-                    <div>
-                        <img className="tam2-1" src="http://www.raphaelfabeni.com.br/rv/images/cart.png"/>
-                    </div>
-                </div>
-                <div className="row">
-                    <img className="tam2-1" src="http://www.raphaelfabeni.com.br/rv/images/banner.png"/>
                 </div>
             </header>
         )
