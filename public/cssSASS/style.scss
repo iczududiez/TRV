@@ -311,26 +311,47 @@ a.btn-buy{
     visibility: hidden;}
 /* BODY >> PRODUCTS */
 
-/* BODY >> CARROSEL */
-.carrosel .carrosel-control{
+/* BODY >> carousel */
+
+.carousel{
+    position:relative;
+    overflow: hidden;
+    height: $lineBase * 19 + px;}
+
+.carousel .carousel-panel{
+    position:relative; 
+    height: $lineBase * 17 + px;}
+
+.carousel .carousel-item{
+    position: absolute;}
+
+.carousel-control{
+    display:none;}
+
+.carousel .carousel-control{
     width: 100%;
     height:  $lineBase + px;
     @include displayInlineBlock();
     text-align: center;}
 
 
-.carrosel .carrosel-control .item-control{
+.carousel .carousel-control .item-control{
     vertical-align: middle;
     background: #d1d1d1;}
 
-.carrosel .carrosel-control .item-control.active{
+.carousel .carousel-control .item-control.active{
     background: #a1a1a1;}
 
-/* BODY >> CARROSEL */
+/* BODY >> carousel */
 
 /* BODY */
 
 /* MEDIA */
+@media (min-width: 1600px){
+    .carousel .carousel-item{
+        max-width: 277px}
+}
+
 @media (max-width: 1340px){
     #app{
         padding:0;}
@@ -348,6 +369,7 @@ a.btn-buy{
 /* MEDIA */
 
 /* https://codepen.io/bbodine1/pen/novBm */
+//I make changes :)
 .squaredTwo {
     height: 20px;
     position: relative;
@@ -357,6 +379,9 @@ a.btn-buy{
         &:checked + label:after {
             opacity: 1;
         } 
+        &:checked ~  span {
+            color: #333;
+        }
     }
     label {
         width: 20px;
@@ -385,6 +410,9 @@ a.btn-buy{
         }
         &:hover::after {
             opacity: 0.3;
+        }
+        &:hover ~ span {
+            color: #333;
         }
     }}
 

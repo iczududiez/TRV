@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Menu = React.createClass({
+var Menu = React.createClass({
     render(){
         return (
             <nav>

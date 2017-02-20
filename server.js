@@ -10,7 +10,7 @@ app.use('/', function(req, res){
 });
 
 //Dava uns erros louco e tinha que mudar de porta kkkkkkkkk!!
-var port = 3003;
+var port = 3010;
 
 app.listen(port, function(error){
     if(error) throw error;

@@ -1,31 +1,35 @@
 import React from 'react';
-import UtilResource from '../Util/UtilResource';
+import UtilResource from '../jsClient/UtilResource';
 
-const Products = React.createClass({
+var Products = React.createClass({
 
     render(){
 
         var products = this.props.products.map(function(productItem, key){
-            return (
-                <div key={key.toString()} className="product carrosel-item">
-                    <figure>
-                        <img src={productItem.image}/>
-                    </figure>
-                    <div className="details">
-                        <a className="person" alt={productItem.title}>PERSONALIZE</a>
-                        <span className="name">{productItem.title}</span>
-                        <span className="describle">{UtilResource.convert.highTop(productItem["high-top"])}</span>
-                        <span className="price">{UtilResource.convert.money(productItem.price)(true)}</span>
-                        <span className="times">ou {productItem.installments.number}X de {UtilResource.convert.money(productItem.installments.value)(false)} sem juros</span>
-                        <a className="btn btn-buy">COMPRAR</a>
+            if(productItem.filter == null ? true : productItem.filter){
+                return (
+                    <div key={key.toString()} className="product carousel-item">
+                        <figure>
+                            <img src={productItem.image}/>
+                        </figure>
+                        <div className="details">
+                            <a className="person" alt={productItem.title}>PERSONALIZE</a>
+                            <span className="name">{productItem.title}</span>
+                            <span className="describle">{UtilResource.convert.highTop(productItem["high-top"])}</span>
+                            <span className="price">{UtilResource.convert.money(productItem.price)('brl')}</span>
+                            <span className="times">ou {productItem.installments.number}X de {UtilResource.convert.money(productItem.installments.value)()} sem juros</span>
+                            <a className="btn btn-buy">COMPRAR</a>
+                        </div>
                     </div>
-                </div>
-            )
+                )
+            }else{
+                return null;
+            }
         })
 
 
         return (
-            <section className="products carrosel-panel">
+            <section className="products carousel-panel">
                 {products}
             </section>
         )

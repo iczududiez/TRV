@@ -7119,30 +7119,7 @@ function getIteratorFn(maybeIterable) {
 module.exports = getIteratorFn;
 
 /***/ }),
-/* 55 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const UtilResource = {
-    translate: {
-        "best-sellers": "Mais Vendidos",
-        "releases": "Lançamentos"
-    },
-    convert: {
-        highTop: function (value) {
-            return value ? "Cano Alto" : "Cano Baixo";
-        },
-        money: function (value) {
-            return function (brlFormat) {
-                return brlFormat ? "R$ " + value.toString().replace(/(\.\d{1})$/, "$10").replace(/\.(\d{2})$/, ",$1") : value.toString().replace(/(\.\d{1})$/, "$10").replace(/\.(00)$/, ",$1");
-            };
-        }
-    }
-};
-
-/* harmony default export */ __webpack_exports__["a"] = UtilResource;
-
-/***/ }),
+/* 55 */,
 /* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10123,10 +10100,12 @@ module.exports = ReactPropTypesSecret;
 
 
 
+
+//require('../../public/js/carousel.js');
 //require('https://fonts.googleapis.com/css?family=Roboto');
 __webpack_require__(217);
 
-const App = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
+var App = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
     displayName: 'App',
 
     render() {
@@ -10158,22 +10137,32 @@ module.exports = __webpack_require__(144);
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Filtro__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Filter__ = __webpack_require__(222);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ShowCase__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_ProductService__ = __webpack_require__(213);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__jsClient_Carousel__ = __webpack_require__(221);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__jsClient_Carousel___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__jsClient_Carousel__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__jsClient_FilterLogic__ = __webpack_require__(223);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__jsClient_FilterLogic___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__jsClient_FilterLogic__);
 
 
 
 
 
-const Body = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
+
+
+var Body = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
     displayName: 'Body',
 
 
     getInitialState() {
         return {
-            products: null
+            products: null,
+            filters: []
         };
+    },
+    componentDidUpdate() {
+        __WEBPACK_IMPORTED_MODULE_4__jsClient_Carousel___default.a.organizes();
     },
     componentDidMount() {
 
@@ -10181,8 +10170,27 @@ const Body = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
 
         __WEBPACK_IMPORTED_MODULE_3__service_ProductService__["a" /* default */].getProducts().then(function (response) {
             this.setState({ products: response.data });
+            __WEBPACK_IMPORTED_MODULE_5__jsClient_FilterLogic___default.a.itemArray = JSON.parse(JSON.stringify(response.data)); //Cloning Object
             //self.setState...
         }.bind(this));
+    },
+    setFilter(event) {
+
+        event = event ? event : window.event;
+        var elem = event.target ? event.target : event.srcElement;
+        var productFilter = this.state.products;
+
+        if (elem.checked) {
+            __WEBPACK_IMPORTED_MODULE_5__jsClient_FilterLogic___default.a.addFilter(elem.getAttribute('name'), elem.value);
+        } else {
+            __WEBPACK_IMPORTED_MODULE_5__jsClient_FilterLogic___default.a.removeFilter(elem.getAttribute('name'), elem.value);
+        }
+
+        for (var prop in productFilter) {
+            productFilter[prop] = __WEBPACK_IMPORTED_MODULE_5__jsClient_FilterLogic___default.a.filterLogic(prop);
+        }
+
+        this.setState({ products: productFilter });
     },
     render() {
 
@@ -10199,7 +10207,7 @@ const Body = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'row' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Filtro__["a" /* default */], null),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Filter__["a" /* default */], { filterFunc: this.setFilter }),
                 showCases
             )
         );
@@ -10209,104 +10217,7 @@ const Body = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
 /* harmony default export */ __webpack_exports__["a"] = Body;
 
 /***/ }),
-/* 91 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-
-
-const Filtro = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
-    displayName: "Filtro",
-
-
-    render() {
-        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            "div",
-            { className: "container container-padLine1-3" },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "div",
-                { className: "filter filter-title" },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    "span",
-                    null,
-                    "Chuteiras HyperVemon:"
-                )
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "div",
-                { className: "filter filter-options" },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    "menu",
-                    null,
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        "ul",
-                        null,
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "li",
-                            { className: "item-filter squaredTwo" },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { id: "chkCanoAlto", type: "checkbox", name: "filterCano", value: "1" }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("label", { htmlFor: "chkCanoAlto" }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                "span",
-                                null,
-                                "Cano alto"
-                            )
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "li",
-                            { className: "item-filter squaredTwo" },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { id: "chkCanoBaixo", type: "checkbox", name: "filterCano", value: "2" }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("label", { htmlFor: "chkCanoBaixo" }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                "span",
-                                null,
-                                "Cano baixo"
-                            )
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "li",
-                            { className: "item-filter squaredTwo" },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { id: "chkFutebolCampo", type: "checkbox", name: "filterFutebol", value: "1" }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("label", { htmlFor: "chkFutebolCampo" }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                "span",
-                                null,
-                                "Futebol Campo"
-                            )
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "li",
-                            { className: "item-filter squaredTwo" },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { id: "chkFutebolSociety", type: "checkbox", name: "filterFutebol", value: "2" }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("label", { htmlFor: "chkFutebolSociety" }),
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                "span",
-                                null,
-                                "Futebol Society"
-                            )
-                        )
-                    )
-                )
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "div",
-                { className: "filter" },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    "a",
-                    { className: "btn btn-default" },
-                    "TODOS OS PRODUTOS"
-                )
-            )
-        );
-    }
-
-});
-
-/* harmony default export */ __webpack_exports__["a"] = Filtro;
-
-/***/ }),
+/* 91 */,
 /* 92 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -10374,7 +10285,7 @@ function Footer() {
 
 
 
-const Header = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
+var Header = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
     displayName: 'Header',
 
 
@@ -10434,7 +10345,7 @@ const Header = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 
 
-const Menu = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
+var Menu = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
     displayName: "Menu",
 
     render() {
@@ -10494,69 +10405,73 @@ const Menu = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Util_UtilResource__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__jsClient_UtilResource__ = __webpack_require__(220);
 
 
 
-const Products = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
+var Products = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
     displayName: 'Products',
 
 
     render() {
 
         var products = this.props.products.map(function (productItem, key) {
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                { key: key.toString(), className: 'product carrosel-item' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'figure',
-                    null,
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { src: productItem.image })
-                ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            if (productItem.filter == null ? true : productItem.filter) {
+                return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: 'details' },
+                    { key: key.toString(), className: 'product carousel-item' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'a',
-                        { className: 'person', alt: productItem.title },
-                        'PERSONALIZE'
+                        'figure',
+                        null,
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { src: productItem.image })
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'span',
-                        { className: 'name' },
-                        productItem.title
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'span',
-                        { className: 'describle' },
-                        __WEBPACK_IMPORTED_MODULE_1__Util_UtilResource__["a" /* default */].convert.highTop(productItem["high-top"])
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'span',
-                        { className: 'price' },
-                        __WEBPACK_IMPORTED_MODULE_1__Util_UtilResource__["a" /* default */].convert.money(productItem.price)(true)
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'span',
-                        { className: 'times' },
-                        'ou ',
-                        productItem.installments.number,
-                        'X de ',
-                        __WEBPACK_IMPORTED_MODULE_1__Util_UtilResource__["a" /* default */].convert.money(productItem.installments.value)(false),
-                        ' sem juros'
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'a',
-                        { className: 'btn btn-buy' },
-                        'COMPRAR'
+                        'div',
+                        { className: 'details' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'a',
+                            { className: 'person', alt: productItem.title },
+                            'PERSONALIZE'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'name' },
+                            productItem.title
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'describle' },
+                            __WEBPACK_IMPORTED_MODULE_1__jsClient_UtilResource__["a" /* default */].convert.highTop(productItem["high-top"])
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'price' },
+                            __WEBPACK_IMPORTED_MODULE_1__jsClient_UtilResource__["a" /* default */].convert.money(productItem.price)('brl')
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'times' },
+                            'ou ',
+                            productItem.installments.number,
+                            'X de ',
+                            __WEBPACK_IMPORTED_MODULE_1__jsClient_UtilResource__["a" /* default */].convert.money(productItem.installments.value)(),
+                            ' sem juros'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'a',
+                            { className: 'btn btn-buy' },
+                            'COMPRAR'
+                        )
                     )
-                )
-            );
+                );
+            } else {
+                return null;
+            }
         });
 
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'section',
-            { className: 'products carrosel-panel' },
+            { className: 'products carousel-panel' },
             products
         );
     }
@@ -10572,21 +10487,32 @@ const Products = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Products__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Util_UtilResource__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__jsClient_UtilResource__ = __webpack_require__(220);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__jsClient_Carousel__ = __webpack_require__(221);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__jsClient_Carousel___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__jsClient_Carousel__);
 
 
 
 
-const ShowCase = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
+
+var ShowCase = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
     displayName: 'ShowCase',
 
+    moveCarousel(event) {
 
+        event = event ? event : window.event;
+        var elem = event.target ? event.target : event.srcElement;
+        __WEBPACK_IMPORTED_MODULE_3__jsClient_Carousel___default.a.moveCarousel(elem);
+    },
     render() {
 
-        var carroselControl = [];
-
-        for (var i = 0, v = this.props.products.length - 4; i < v; i++) {
-            carroselControl.push(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('span', { key: i, className: !i ? "item-control bullet active" : "item-control bullet" }));
+        var carouselControl = [];
+        var size = this.props.products.filter(function (item) {
+            return item.filter == null ? true : item.filter;
+        }).length;
+        size = size - 3 > 1 ? size - 3 : 0;
+        for (let i = 0, v = size; i < v; i++) {
+            carouselControl.push(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('span', { key: i, onClick: this.moveCarousel, className: !i ? "item-control bullet active" : "item-control bullet" }));
         }
 
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -10595,16 +10521,18 @@ const ShowCase = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'h3',
                 null,
-                __WEBPACK_IMPORTED_MODULE_2__Util_UtilResource__["a" /* default */].translate[this.props.name]
+                __WEBPACK_IMPORTED_MODULE_2__jsClient_UtilResource__["a" /* default */].translate[this.props.name] || this.props.name.replace(/^(\w)/, function (match) {
+                    return match.toUpperCase();
+                })
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { className: 'carrosel' },
+                { className: 'carousel' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Products__["a" /* default */], { products: this.props.products }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'menu',
-                    { className: 'carrosel-control' },
-                    carroselControl
+                    { className: 'carousel-control' },
+                    carouselControl
                 )
             )
         );
@@ -23940,7 +23868,7 @@ exports = module.exports = __webpack_require__(115)();
 
 
 // module
-exports.push([module.i, "/*responsive* /\r\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\r\n/* RESET CSS */\r\nhtml, body, div, span, applet, object, iframe,\r\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\r\na, abbr, acronym, address, big, cite, code,\r\ndel, dfn, em, img, ins, kbd, q, s, samp,\r\nsmall, strike, strong, sub, sup, tt, var,\r\nb, u, i, center,\r\ndl, dt, dd, ol, ul, li,\r\nfieldset, form, label, legend,\r\ntable, caption, tbody, tfoot, thead, tr, th, td,\r\narticle, aside, canvas, details, embed,\r\nfigure, figcaption, footer, header, hgroup,\r\nmenu, nav, output, ruby, section, summary,\r\ntime, mark, audio, video {\r\n  margin: 0;\r\n  padding: 0;\r\n  border: 0;\r\n  font-size: 100%;\r\n  font: inherit;\r\n  vertical-align: baseline; }\r\n\r\n/* HTML5 display-role reset for older browsers */\r\narticle, aside, details, div, figcaption, figure, footer, header, hgroup, menu, nav, section {\r\n  display: block;\r\n  box-sizing: border-box;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box; }\r\n\r\nbody {\r\n  line-height: 1; }\r\n\r\nol, ul {\r\n  list-style: none; }\r\n\r\nblockquote, q {\r\n  quotes: none; }\r\n\r\nblockquote:before, blockquote:after,\r\nq:before, q:after {\r\n  content: '';\r\n  content: none; }\r\n\r\ntable {\r\n  border-collapse: collapse;\r\n  border-spacing: 0; }\r\n\r\n/* RESET CSS */\r\n/** Variaveis **/\r\n/** Mixin **/\r\n/** ELEMENTS **/\r\na {\r\n  text-decoration: none;\r\n  color: #000;\r\n  cursor: pointer; }\r\n\r\nnav .vertical {\r\n  display: flex;\r\n  flex-direction: row; }\r\n\r\n/* HEADER */\r\nheader .item-Header {\r\n  padding-top: 1.5625%;\r\n  padding-bottom: 1.5625%; }\r\n\r\nheader .logo {\r\n  width: 8.59375%;\r\n  padding-right: 3.125%; }\r\n\r\nheader .nav-bar {\r\n  width: 85.9375%;\r\n  font-size: 14px;\r\n  font-size: 0.875rem;\r\n  display: flex;\r\n  align-items: center; }\r\n\r\nheader .nav-bar ul {\r\n  display: flex;\r\n  align-items: center; }\r\n\r\nheader .nav-bar ul li {\r\n  margin-right: 4%; }\r\n\r\nheader .cart {\r\n  width: 8.59375%;\r\n  padding-left: 3.125%; }\r\n\r\nheader .cart img {\r\n  /*width: $largeColumnBase * 0.75 + px;*/\r\n  height: 37.5px;\r\n  margin: 0px 17.5px; }\r\n\r\n/* HEADER */\r\n/* FOOTER */\r\nfooter .footer-menu {\r\n  color: #000;\r\n  z-index: 1;\r\n  position: absolute;\r\n  top: 40%;\r\n  left: 0px;\r\n  width: 100%;\r\n  text-align: center; }\r\n\r\nfooter .footer-menu p {\r\n  font-size: 72px;\r\n  font-size: 4.5rem;\r\n  color: #fff;\r\n  font-weight: 900; }\r\n\r\nfooter .footer-menu a.btn {\r\n  margin-top: 20px;\r\n  left: 43.39403%; }\r\n\r\nfooter .copyright {\r\n  height: 25px;\r\n  color: #999999;\r\n  text-align: center;\r\n  font-weight: normal;\r\n  margin-top: 25px; }\r\n\r\n/* FOOTER */\r\n/** ID, CLASSES AND SELECTORS**/\r\n:root {\r\n  font-size: 16px; }\r\n\r\n#app {\r\n  width: 100%;\r\n  max-width: 1600px;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  padding: 0 7.5%;\r\n  font-family: \"Roboto\", \"sans serif\";\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  font-weight: bold; }\r\n\r\n.container {\r\n  width: 100%;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  padding: 0 2.5%;\r\n  display: flex;\r\n  position: relative; }\r\n\r\n.container-padLine1-3 {\r\n  padding-top: 25px;\r\n  padding-bottom: 75px; }\r\n\r\n.container-noFlex {\r\n  display: block; }\r\n\r\n.row {\r\n  margin-left: -5px;\r\n  margin-right: -5px;\r\n  position: relative; }\r\n  .row:before {\r\n    content: \"\";\r\n    display: table; }\r\n  .row:after {\r\n    content: \"\";\r\n    display: table;\r\n    clear: both; }\r\n\r\na.btn {\r\n  display: block;\r\n  color: #fff;\r\n  background: #313131;\r\n  padding: 15px;\r\n  font-size: 13px;\r\n  font-size: 0.8125rem;\r\n  -webkit-border-radius: 4px;\r\n  -moz-border-radius: 4px;\r\n  border-radius: 4px;\r\n  text-align: center;\r\n  position: relative; }\r\n\r\na.btn-default {\r\n  max-width: 145px;\r\n  min-width: 145px; }\r\n\r\na.btn-buy {\r\n  text-align: center;\r\n  margin-top: 20px;\r\n  background: #ff5c2b; }\r\n\r\n.bullet {\r\n  display: inline-block;\r\n  /* IE Hack*/\r\n  *zoom: 1;\r\n  *display: inline;\r\n  width: 9px;\r\n  height: 9px;\r\n  background: #a1a1a1;\r\n  margin: 0px 5px;\r\n  cursor: pointer;\r\n  -webkit-border-radius: 10px;\r\n  -moz-border-radius: 10px;\r\n  border-radius: 10px; }\r\n\r\n.banner {\r\n  margin-left: -120px; }\r\n\r\n/* BODY */\r\n/* BODY >> FILTER */\r\n.filter {\r\n  display: flex;\r\n  align-items: center;\r\n  height: 75px;\r\n  font-size: 18px;\r\n  font-size: 1.125rem; }\r\n\r\n.filter-title {\r\n  width: 17.1875%; }\r\n\r\n.item-filter {\r\n  width: 20%; }\r\n\r\n.filter-options {\r\n  width: 68.75%;\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  color: #999; }\r\n\r\n.filter-options menu {\r\n  width: 100%; }\r\n\r\n.filter-options ul {\r\n  display: flex;\r\n  align-items: center; }\r\n\r\n.filter-options input[type=\"checkbox\"] {\r\n  height: 15px;\r\n  margin-right: 15px; }\r\n\r\n/* BODY >> FILTER */\r\n/* BODY >> PRODUCTS */\r\n.products {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  position: relative; }\r\n\r\n.product {\r\n  width: 22%;\r\n  padding: 2% 3% 0%;\r\n  margin-right: 3%;\r\n  text-align: center; }\r\n\r\n.product:hover > .details {\r\n  margin-top: -20px; }\r\n\r\n.product:hover > .details > a.btn {\r\n  visibility: visible; }\r\n\r\n.product .details {\r\n  text-align: left; }\r\n\r\n.product .details a.person {\r\n  font-size: 12px;\r\n  font-size: 0.75rem;\r\n  width: 100%;\r\n  display: block;\r\n  color: #666666; }\r\n  .product .details a.person:before {\r\n    content: '';\r\n    display: inline-block;\r\n    /* IE Hack*/\r\n    *zoom: 1;\r\n    *display: inline;\r\n    width: 16px;\r\n    height: 16px;\r\n    background: url(\"http://www.raphaelfabeni.com.br/rv/images/personalize.jpg\");\r\n    /* cut margin inline */\r\n    margin-bottom: -3px;\r\n    margin-right: 5px; }\r\n\r\n.product .details span {\r\n  display: block;\r\n  margin-top: 10px;\r\n  font-size: 14px;\r\n  font-size: 0.875rem; }\r\n\r\n.product .details span.describle {\r\n  font-weight: normal;\r\n  color: #999; }\r\n\r\n.product .details span.price {\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  color: #666666; }\r\n\r\n.product .details span.times {\r\n  font-size: 14px;\r\n  font-size: 0.875rem;\r\n  font-weight: normal;\r\n  color: #666666; }\r\n\r\n.product .details a.btn {\r\n  visibility: hidden; }\r\n\r\n/* BODY >> PRODUCTS */\r\n/* BODY >> CARROSEL */\r\n.carrosel .carrosel-control {\r\n  width: 100%;\r\n  height: 25px;\r\n  display: inline-block;\r\n  /* IE Hack*/\r\n  *zoom: 1;\r\n  *display: inline;\r\n  text-align: center; }\r\n\r\n.carrosel .carrosel-control .item-control {\r\n  vertical-align: middle;\r\n  background: #d1d1d1; }\r\n\r\n.carrosel .carrosel-control .item-control.active {\r\n  background: #a1a1a1; }\r\n\r\n/* BODY >> CARROSEL */\r\n/* BODY */\r\n/* MEDIA */\r\n@media (max-width: 1340px) {\r\n  #app {\r\n    padding: 0; }\r\n\r\n  .item-filter span {\r\n    display: inline-block;\r\n    width: 65%; } }\r\n@media (max-width: 972px) {\r\n  .item-filter {\r\n    width: 25%; } }\r\n/* MEDIA */\r\n/* https://codepen.io/bbodine1/pen/novBm */\r\n.squaredTwo {\r\n  height: 20px;\r\n  position: relative;\r\n  background: #fff; }\r\n  .squaredTwo input[type=checkbox] {\r\n    visibility: hidden; }\r\n    .squaredTwo input[type=checkbox]:checked + label:after {\r\n      opacity: 1; }\r\n  .squaredTwo label {\r\n    width: 20px;\r\n    height: 20px;\r\n    cursor: pointer;\r\n    position: absolute;\r\n    left: 0px;\r\n    top: 0px;\r\n    background: #fff;\r\n    border: 1px solid #ccc; }\r\n    .squaredTwo label:after {\r\n      content: '';\r\n      width: 9px;\r\n      height: 5px;\r\n      position: absolute;\r\n      top: 4px;\r\n      left: 4px;\r\n      border: 3px solid #333;\r\n      border-top: none;\r\n      border-right: none;\r\n      background: transparent;\r\n      opacity: 0;\r\n      -webkit-transform: rotate(-45deg);\r\n      -moz-transform: rotate(-45deg);\r\n      transform: rotate(-45deg); }\r\n    .squaredTwo label:hover::after {\r\n      opacity: 0.3; }\r\n\r\n/*# sourceMappingURL=style.css.map */\r\n", ""]);
+exports.push([module.i, "/*responsive* /\r\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\r\n/* RESET CSS */\r\nhtml, body, div, span, applet, object, iframe,\r\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\r\na, abbr, acronym, address, big, cite, code,\r\ndel, dfn, em, img, ins, kbd, q, s, samp,\r\nsmall, strike, strong, sub, sup, tt, var,\r\nb, u, i, center,\r\ndl, dt, dd, ol, ul, li,\r\nfieldset, form, label, legend,\r\ntable, caption, tbody, tfoot, thead, tr, th, td,\r\narticle, aside, canvas, details, embed,\r\nfigure, figcaption, footer, header, hgroup,\r\nmenu, nav, output, ruby, section, summary,\r\ntime, mark, audio, video {\r\n  margin: 0;\r\n  padding: 0;\r\n  border: 0;\r\n  font-size: 100%;\r\n  font: inherit;\r\n  vertical-align: baseline; }\r\n\r\n/* HTML5 display-role reset for older browsers */\r\narticle, aside, details, div, figcaption, figure, footer, header, hgroup, menu, nav, section {\r\n  display: block;\r\n  box-sizing: border-box;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box; }\r\n\r\nbody {\r\n  line-height: 1; }\r\n\r\nol, ul {\r\n  list-style: none; }\r\n\r\nblockquote, q {\r\n  quotes: none; }\r\n\r\nblockquote:before, blockquote:after,\r\nq:before, q:after {\r\n  content: '';\r\n  content: none; }\r\n\r\ntable {\r\n  border-collapse: collapse;\r\n  border-spacing: 0; }\r\n\r\n/* RESET CSS */\r\n/** Variaveis **/\r\n/** Mixin **/\r\n/** ELEMENTS **/\r\na {\r\n  text-decoration: none;\r\n  color: #000;\r\n  cursor: pointer; }\r\n\r\nnav .vertical {\r\n  display: flex;\r\n  flex-direction: row; }\r\n\r\n/* HEADER */\r\nheader .item-Header {\r\n  padding-top: 1.5625%;\r\n  padding-bottom: 1.5625%; }\r\n\r\nheader .logo {\r\n  width: 8.59375%;\r\n  padding-right: 3.125%; }\r\n\r\nheader .nav-bar {\r\n  width: 85.9375%;\r\n  font-size: 14px;\r\n  font-size: 0.875rem;\r\n  display: flex;\r\n  align-items: center; }\r\n\r\nheader .nav-bar ul {\r\n  display: flex;\r\n  align-items: center; }\r\n\r\nheader .nav-bar ul li {\r\n  margin-right: 4%; }\r\n\r\nheader .cart {\r\n  width: 8.59375%;\r\n  padding-left: 3.125%; }\r\n\r\nheader .cart img {\r\n  /*width: $largeColumnBase * 0.75 + px;*/\r\n  height: 37.5px;\r\n  margin: 0px 17.5px; }\r\n\r\n/* HEADER */\r\n/* FOOTER */\r\nfooter .footer-menu {\r\n  color: #000;\r\n  z-index: 1;\r\n  position: absolute;\r\n  top: 40%;\r\n  left: 0px;\r\n  width: 100%;\r\n  text-align: center; }\r\n\r\nfooter .footer-menu p {\r\n  font-size: 72px;\r\n  font-size: 4.5rem;\r\n  color: #fff;\r\n  font-weight: 900; }\r\n\r\nfooter .footer-menu a.btn {\r\n  margin-top: 20px;\r\n  left: 43.39403%; }\r\n\r\nfooter .copyright {\r\n  height: 25px;\r\n  color: #999999;\r\n  text-align: center;\r\n  font-weight: normal;\r\n  margin-top: 25px; }\r\n\r\n/* FOOTER */\r\n/** ID, CLASSES AND SELECTORS**/\r\n:root {\r\n  font-size: 16px; }\r\n\r\n#app {\r\n  width: 100%;\r\n  max-width: 1600px;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  padding: 0 7.5%;\r\n  font-family: \"Roboto\", \"sans serif\";\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  font-weight: bold; }\r\n\r\n.container {\r\n  width: 100%;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  padding: 0 2.5%;\r\n  display: flex;\r\n  position: relative; }\r\n\r\n.container-padLine1-3 {\r\n  padding-top: 25px;\r\n  padding-bottom: 75px; }\r\n\r\n.container-noFlex {\r\n  display: block; }\r\n\r\n.row {\r\n  margin-left: -5px;\r\n  margin-right: -5px;\r\n  position: relative; }\r\n  .row:before {\r\n    content: \"\";\r\n    display: table; }\r\n  .row:after {\r\n    content: \"\";\r\n    display: table;\r\n    clear: both; }\r\n\r\na.btn {\r\n  display: block;\r\n  color: #fff;\r\n  background: #313131;\r\n  padding: 15px;\r\n  font-size: 13px;\r\n  font-size: 0.8125rem;\r\n  -webkit-border-radius: 4px;\r\n  -moz-border-radius: 4px;\r\n  border-radius: 4px;\r\n  text-align: center;\r\n  position: relative; }\r\n\r\na.btn-default {\r\n  max-width: 145px;\r\n  min-width: 145px; }\r\n\r\na.btn-buy {\r\n  text-align: center;\r\n  margin-top: 20px;\r\n  background: #ff5c2b; }\r\n\r\n.bullet {\r\n  display: inline-block;\r\n  /* IE Hack*/\r\n  *zoom: 1;\r\n  *display: inline;\r\n  width: 9px;\r\n  height: 9px;\r\n  background: #a1a1a1;\r\n  margin: 0px 5px;\r\n  cursor: pointer;\r\n  -webkit-border-radius: 10px;\r\n  -moz-border-radius: 10px;\r\n  border-radius: 10px; }\r\n\r\n.banner {\r\n  margin-left: -120px; }\r\n\r\n/* BODY */\r\n/* BODY >> FILTER */\r\n.filter {\r\n  display: flex;\r\n  align-items: center;\r\n  height: 75px;\r\n  font-size: 18px;\r\n  font-size: 1.125rem; }\r\n\r\n.filter-title {\r\n  width: 17.1875%; }\r\n\r\n.item-filter {\r\n  width: 20%; }\r\n\r\n.filter-options {\r\n  width: 68.75%;\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  color: #999; }\r\n\r\n.filter-options menu {\r\n  width: 100%; }\r\n\r\n.filter-options ul {\r\n  display: flex;\r\n  align-items: center; }\r\n\r\n.filter-options input[type=\"checkbox\"] {\r\n  height: 15px;\r\n  margin-right: 15px; }\r\n\r\n/* BODY >> FILTER */\r\n/* BODY >> PRODUCTS */\r\n.products {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  position: relative; }\r\n\r\n.product {\r\n  width: 22%;\r\n  padding: 2% 3% 0%;\r\n  margin-right: 3%;\r\n  text-align: center; }\r\n\r\n.product:hover > .details {\r\n  margin-top: -20px; }\r\n\r\n.product:hover > .details > a.btn {\r\n  visibility: visible; }\r\n\r\n.product .details {\r\n  text-align: left; }\r\n\r\n.product .details a.person {\r\n  font-size: 12px;\r\n  font-size: 0.75rem;\r\n  width: 100%;\r\n  display: block;\r\n  color: #666666; }\r\n  .product .details a.person:before {\r\n    content: '';\r\n    display: inline-block;\r\n    /* IE Hack*/\r\n    *zoom: 1;\r\n    *display: inline;\r\n    width: 16px;\r\n    height: 16px;\r\n    background: url(\"http://www.raphaelfabeni.com.br/rv/images/personalize.jpg\");\r\n    /* cut margin inline */\r\n    margin-bottom: -3px;\r\n    margin-right: 5px; }\r\n\r\n.product .details span {\r\n  display: block;\r\n  margin-top: 10px;\r\n  font-size: 14px;\r\n  font-size: 0.875rem; }\r\n\r\n.product .details span.describle {\r\n  font-weight: normal;\r\n  color: #999; }\r\n\r\n.product .details span.price {\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  color: #666666; }\r\n\r\n.product .details span.times {\r\n  font-size: 14px;\r\n  font-size: 0.875rem;\r\n  font-weight: normal;\r\n  color: #666666; }\r\n\r\n.product .details a.btn {\r\n  visibility: hidden; }\r\n\r\n/* BODY >> PRODUCTS */\r\n/* BODY >> carousel */\r\n.carousel {\r\n  position: relative;\r\n  overflow: hidden;\r\n  height: 475px; }\r\n\r\n.carousel .carousel-panel {\r\n  position: relative;\r\n  height: 425px; }\r\n\r\n.carousel .carousel-item {\r\n  position: absolute; }\r\n\r\n.carousel-control {\r\n  display: none; }\r\n\r\n.carousel .carousel-control {\r\n  width: 100%;\r\n  height: 25px;\r\n  display: inline-block;\r\n  /* IE Hack*/\r\n  *zoom: 1;\r\n  *display: inline;\r\n  text-align: center; }\r\n\r\n.carousel .carousel-control .item-control {\r\n  vertical-align: middle;\r\n  background: #d1d1d1; }\r\n\r\n.carousel .carousel-control .item-control.active {\r\n  background: #a1a1a1; }\r\n\r\n/* BODY >> carousel */\r\n/* BODY */\r\n/* MEDIA */\r\n@media (min-width: 1600px) {\r\n  .carousel .carousel-item {\r\n    max-width: 277px; } }\r\n@media (max-width: 1340px) {\r\n  #app {\r\n    padding: 0; }\r\n\r\n  .item-filter span {\r\n    display: inline-block;\r\n    width: 65%; } }\r\n@media (max-width: 972px) {\r\n  .item-filter {\r\n    width: 25%; } }\r\n/* MEDIA */\r\n/* https://codepen.io/bbodine1/pen/novBm */\r\n.squaredTwo {\r\n  height: 20px;\r\n  position: relative;\r\n  background: #fff; }\r\n  .squaredTwo input[type=checkbox] {\r\n    visibility: hidden; }\r\n    .squaredTwo input[type=checkbox]:checked + label:after {\r\n      opacity: 1; }\r\n    .squaredTwo input[type=checkbox]:checked ~ span {\r\n      color: #333; }\r\n  .squaredTwo label {\r\n    width: 20px;\r\n    height: 20px;\r\n    cursor: pointer;\r\n    position: absolute;\r\n    left: 0px;\r\n    top: 0px;\r\n    background: #fff;\r\n    border: 1px solid #ccc; }\r\n    .squaredTwo label:after {\r\n      content: '';\r\n      width: 9px;\r\n      height: 5px;\r\n      position: absolute;\r\n      top: 4px;\r\n      left: 4px;\r\n      border: 3px solid #333;\r\n      border-top: none;\r\n      border-right: none;\r\n      background: transparent;\r\n      opacity: 0;\r\n      -webkit-transform: rotate(-45deg);\r\n      -moz-transform: rotate(-45deg);\r\n      transform: rotate(-45deg); }\r\n    .squaredTwo label:hover::after {\r\n      opacity: 0.3; }\r\n    .squaredTwo label:hover ~ span {\r\n      color: #333; }\r\n\r\n/*# sourceMappingURL=style.css.map */\r\n", ""]);
 
 // exports
 
@@ -24245,6 +24173,493 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_react_dom__["render"])(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__components_App__["a" /* default */], null), document.getElementById("app"));
+
+/***/ }),
+/* 219 */,
+/* 220 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const UtilResource = {
+    translate: {
+        "best-sellers": "Mais Vendidos",
+        "releases": "Lançamentos"
+    },
+    convert: {
+        highTop: function (value) {
+            return !!value ? "Cano Alto" : "Cano Baixo";
+        },
+        money: function (value) {
+
+            value = value.toString().replace(/(\.\d{1})$/, "$10").replace(/\.(\d{2})$/, ",$1");
+
+            return function (typeFormat) {
+                var format = {
+                    'brl': "R$ " + value
+                };
+                return format[typeFormat] || value;
+            };
+        }
+    }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = UtilResource;
+
+/***/ }),
+/* 221 */
+/***/ (function(module, exports) {
+
+//For test in the development tools
+//var Carousel = {
+Carousel = {
+    memo: {}
+};
+
+Carousel.validation = function () {
+
+    return !!document.getElementsByClassName('carousel').length && !!document.getElementsByClassName('carousel-panel').length && !!document.getElementsByClassName('carousel-item').length && !!document.getElementsByClassName('carousel-control').length;
+};
+
+Carousel.organizes = function () {
+
+    if (!this.validation()) {
+        return;
+    }
+
+    function organization(elem, key) {
+
+        elem.setAttribute("carouselKey", key);
+        var itens = getChildrensByClass(getChildrensByClass(elem, 'carousel-panel'), "carousel-item");
+        var itensControl = getChildrensByClass(getChildrensByClass(elem, 'carousel-control'), "item-control");
+        var elemActive = getChildrensByClass(itensControl[0] ? itensControl[0].parentElement : null, "active")[0];
+        var itemWidth = itens[0].clientWidth;
+        var marginItem = (elem.clientWidth - itemWidth * 4) / 3;
+        var startMargin = elemActive && elemActive.getAttribute("carControl") ? (itemWidth + marginItem) * (parseInt(elemActive.getAttribute("carControl")) + 1) * -1 : 0;
+
+        function itemMargin(item, index) {
+            item.setAttribute("style", "margin-left:" + (startMargin + (itemWidth + marginItem) * index) + "px;");
+        }
+
+        itens.map(itemMargin);
+        itensControl.map(function (item, key) {
+            item.setAttribute("carControl", key);
+        });
+
+        this.memo[key] = { "itens": itens,
+            "itensControl": itensControl,
+            "itemWidth": itemWidth,
+            "marginItem": marginItem,
+            "lastActiveElem": null,
+            "moving": false,
+            "changeMoving": { 'elemRequest': null,
+                'qtdMoves': 0,
+                'status': 'OK' } };
+    }
+
+    var carousels = document.getElementsByClassName('carousel');
+
+    Array.prototype.map.call(carousels, organization.bind(this));
+};
+
+Carousel.moveCarousel = function (elem) {
+
+    var activeControl = null;
+    var parentCarousel = findParentByClass(elem, 'carousel');
+    var key = parentCarousel.getAttribute("carouselKey");
+
+    if (!this.memo[key].moving) {
+        var itemSelectedPosition = parseInt(elem.getAttribute("carControl"));
+        var itemACtivePosition = 0;
+
+        if (this.memo[key].changeMoving.status === 'lastProcess') {
+            var positionLastElem = this.memo[key].lastActiveElem.getAttribute('carControl');
+            var qtdMove = this.memo[key].changeMoving.qtdMoves;
+            activeControl = getSiblingsByAttributeValue(elem, 'carControl', qtdMove > 0 ? qtdMove - positionLastElem : positionLastElem - qtdMove * -1);
+            this.memo[key].changeMoving.status = "OK";
+            if (!activeControl.length) {
+                addClass(elem, 'active');
+                getSiblingsElems(elem).map(function (elemSibling) {
+                    removeClass(elemSibling, 'active');
+                });
+            }
+        } else {
+            activeControl = getSiblingsByClassName(elem, "active");
+        }
+
+        if (activeControl.length) {
+            itemACtivePosition = parseInt(activeControl[0].getAttribute("carControl"));
+
+            this.movementLogic(itemACtivePosition < itemSelectedPosition, itemACtivePosition - itemSelectedPosition)(parentCarousel);
+
+            this.memo[key].lastActiveElem = activeControl[0];
+            addClass(elem, 'active');
+            getSiblingsElems(elem).map(function (elemSibling) {
+                removeClass(elemSibling, 'active');
+            });
+        }
+    } else {
+        this.memo[key].changeMoving.status = 'require';
+        this.memo[key].changeMoving.elemRequest = elem;
+    }
+};
+
+Carousel.movementLogic = function (direction, moves) {
+
+    if (direction) {
+        moves = moves * -1;
+    }
+
+    // debugger;
+    function move(elemParent) {
+        var key = elemParent.getAttribute("carouselKey");
+
+        //debugger;
+        if (!this.memo[key].moving) {
+            this.memo[key].moving = true;
+
+            var speed = 3;
+            //var remains = Math.ceil(((this.memo[key].marginItem + this.memo[key].itemWidth) * moves) / 3);
+            var qtdItensControl = this.memo[key].itensControl.length;
+            var movement = this.memo[key].marginItem + this.memo[key].itemWidth;
+            var remains = movement * moves;
+
+            function validationMove(currentMargin, index, itens, nextMargin) {
+
+                if (direction) {
+                    return index ? true : nextMargin >= movement * (qtdItensControl - 1) * -1;
+                } else {
+                    return index ? true : nextMargin <= 0;
+                }
+            }
+
+            function mapFunc(item, index, itens) {
+                var currentStyle = item.getAttribute("style");
+                var currentMargin = parseInt(currentStyle ? currentStyle.replace(/margin-left:\s?(-?\d+)px;/, "$1") : 0);
+                var nextMargin = 0;
+
+                if (direction) {
+                    nextMargin = currentMargin - speed;
+                    if (validationMove(currentMargin, index, itens, nextMargin)) {
+                        item.setAttribute("style", "margin-left:" + nextMargin + "px;");
+                    } else {
+                        remains = 0;
+                    }
+                } else {
+                    nextMargin = currentMargin + speed;
+                    if (validationMove(currentMargin, index, itens, nextMargin)) {
+                        item.setAttribute("style", "margin-left:" + nextMargin + "px;");
+                    } else {
+                        remains = 0;
+                    }
+                }
+            }
+
+            function animationFunc() {
+                if (remains) {
+                    if (this.memo[key].changeMoving.status === 'require') {
+                        this.memo[key].changeMoving.qtdMoves = moves - (remains - remains % movement) / movement;
+                        this.memo[key].changeMoving.qtdMoves *= direction ? 1 : -1;
+                        remains = remains % movement;
+                        this.memo[key].changeMoving.status = 'callMove';
+                    }
+                    this.memo[key].itens.map(mapFunc);
+                    remains = remains ? remains - speed : remains;
+                } else {
+                    clearInterval(animation);
+                    this.memo[key].moving = false;
+                    if (this.memo[key].changeMoving.status === 'callMove') {
+                        this.memo[key].changeMoving.status = 'lastProcess';
+                        this.moveCarousel(this.memo[key].changeMoving.elemRequest);
+                    }
+                }
+            }
+
+            var animation = setInterval(animationFunc.bind(this), 10);
+        }
+    }
+    return move.bind(this);
+};
+
+/* util Functions */
+function getSiblingsByClassName(elem, classSiblingElem) {
+
+    function filterSiblings(elemSibling) {
+        return hasAttributeValue(elemSibling, 'class', classSiblingElem);
+    }
+
+    return getSiblingsElems(elem).filter(filterSiblings);
+}
+
+function getSiblingsByAttributeValue(elem, attribute, value) {
+
+    function filterSiblings(elemSibling) {
+        return hasAttributeValue(elemSibling, attribute, value);
+    }
+
+    return getSiblingsElems(elem).filter(filterSiblings);
+}
+
+function getSiblingsElems(elem, nextOrPreviousOrNull) {
+
+    var ret = [];
+    var control = {
+        'previous': 'previousElementSibling',
+        'next': 'nextElementSibling'
+    };
+
+    function getSiblings(elem, prop) {
+        var ret = [];
+
+        while (elem[prop]) {
+            ret.push(elem[prop]);
+            elem = elem[prop];
+        }
+
+        return ret;
+    }
+
+    function getSiblingsWithMap(prop) {
+        return getSiblings(elem, control[prop]);
+    }
+
+    if (control[nextOrPreviousOrNull]) {
+        ret = getSiblings(elem, control[nextOrPreviousOrNull]).reverse();
+    } else {
+        ret = Object.getOwnPropertyNames(control).map(getSiblingsWithMap);
+        ret = ret[0].concat(ret[1]);
+    }
+    return ret;
+}
+
+function addClass(elem, _class) {
+    addValueAttribute(elem, 'class', _class);
+}
+
+function removeClass(elem, _class) {
+    elem.setAttribute('class', elem.getAttribute('class').replace(new RegExp("\\s?" + _class + "\\s?"), " ").trim());
+}
+
+function typeObject(obj, test) {
+    var type = Object.prototype.toString.call(obj).replace(/\]|\[|object\s/g, "");
+    return test ? new RegExp(test, "i").test(type) : type;
+}
+
+function addValueAttribute(elem, attribute, value) {
+    elem.setAttribute(attribute, elem.getAttribute(attribute).replace(/([\w\W]*)/, "$1 " + value));
+}
+
+//if elem is array of elems only childrens for the first is return
+function getChildrensByClass(elem, classChildrenElem) {
+
+    var ret = [];
+    elem = typeObject(elem, "html[\\w\\W]*element") ? elem : typeObject(elem, "array|htmlcolletcion") ? elem[0] : null;
+
+    if (!elem) {
+        return ret;
+    }
+
+    for (var i = 0, v = elem.children.length; i < v; i++) {
+        if (hasAttributeValue(elem.children[i], 'class', classChildrenElem)) {
+            ret.push(elem.children[i]);
+        }
+    }
+
+    return ret;
+}
+
+function findParentByClass(elem, classParentElem) {
+
+    while (elem.parentElement && elem.parentElement.tagName != "BODY") {
+        if (hasAttributeValue(elem.parentElement, 'class', classParentElem)) {
+            return elem.parentElement;
+        }
+        elem = elem.parentElement;
+    }
+
+    return null;
+}
+
+function hasAttributeValue(elem, attribute, haveValue) {
+    var regex = "^" + haveValue + "$|" + "^" + haveValue + "\\s|" + "\\s" + haveValue + "$|" + "\\s" + haveValue + "\\s";
+    return new RegExp(regex, 'gi').test(elem.getAttribute(attribute));
+}
+
+window.onresize = function () {
+    //debugger;
+    Carousel.organizes();
+    console.log("resize call");
+};
+
+module.exports = Carousel;
+
+/***/ }),
+/* 222 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+var Filtro = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
+    displayName: "Filtro",
+
+
+    render() {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "div",
+            { className: "container container-padLine1-3" },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                "div",
+                { className: "filter filter-title" },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    "span",
+                    null,
+                    "Chuteiras HyperVemon:"
+                )
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                "div",
+                { className: "filter filter-options" },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    "menu",
+                    null,
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "ul",
+                        null,
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "li",
+                            { className: "item-filter squaredTwo" },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { id: "chkCanoAlto", type: "checkbox", name: "high-top", value: "1", onClick: this.props.filterFunc }),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("label", { htmlFor: "chkCanoAlto" }),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                "span",
+                                null,
+                                "Cano alto"
+                            )
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "li",
+                            { className: "item-filter squaredTwo" },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { id: "chkCanoBaixo", type: "checkbox", name: "high-top", value: "", onClick: this.props.filterFunc }),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("label", { htmlFor: "chkCanoBaixo" }),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                "span",
+                                null,
+                                "Cano baixo"
+                            )
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "li",
+                            { className: "item-filter squaredTwo" },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { id: "chkFutebolCampo", type: "checkbox", name: "category", value: "campo", onClick: this.props.filterFunc }),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("label", { htmlFor: "chkFutebolCampo" }),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                "span",
+                                null,
+                                "Futebol Campo"
+                            )
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "li",
+                            { className: "item-filter squaredTwo" },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { id: "chkFutebolSociety", type: "checkbox", name: "category", value: "society", onClick: this.props.filterFunc }),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("label", { htmlFor: "chkFutebolSociety" }),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                "span",
+                                null,
+                                "Futebol Society"
+                            )
+                        )
+                    )
+                )
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                "div",
+                { className: "filter" },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    "a",
+                    { className: "btn btn-default" },
+                    "TODOS OS PRODUTOS"
+                )
+            )
+        );
+    }
+
+});
+
+/* harmony default export */ __webpack_exports__["a"] = Filtro;
+
+/***/ }),
+/* 223 */
+/***/ (function(module, exports) {
+
+//var Filter = {
+module.exports = {
+    filters: [],
+    itemArray: [],
+    addFilter(filter, value) {
+        this.filters.push({ 'property': filter, 'value': value });
+    },
+    removeFilter(filter, value) {
+
+        function removeFunc(itemFilter) {
+            return itemFilter.property === filter ? !(itemFilter.value === value) : true;
+        }
+
+        this.filters = this.filters.filter(removeFunc);
+    },
+    filterLogic(prop) {
+
+        return this.itemArray[prop].filter(function (item) {
+
+            var ret = false;
+
+            for (let i = 0, v = this.filters.length; i < v; i++) {
+                if (item[this.filters[i].property] == this.filters[i].value) {
+                    ret = true;
+                    break;
+                }
+            }
+
+            return ret;
+        }.bind(this));
+    }
+};
+/*
+Filter.addFilter = function(filter, value){
+    this.filters.push({'property':filter,'value':value});
+}
+
+Filter.removeFilter =  function(filter, value){
+
+    function removeFunc(itemFilter){
+        return itemFilter.property === filter ?  !(value === value) : true;
+    }
+
+    this.filters = filters.filter(removeFunc);
+}
+
+Filter.filters = function(array){
+
+    array = array.filter(function(item){
+
+        var ret = false;
+
+        for(let i = 0, v = this.filters.length; i < v; i++){
+            if(item[this.filters[i].property] == this.filters[i].value){
+                ret = true;
+                break;
+            }
+        }
+
+        return ret;
+
+    }.bind(this));
+
+    return array;
+}
+8*/
 
 /***/ })
 /******/ ]);

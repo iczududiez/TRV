@@ -1,7 +1,7 @@
 import React from 'react';
 import Menu from './Menu.js';
 
-const Header = React.createClass({
+var Header = React.createClass({
 
     render(){
         return (

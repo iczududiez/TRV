@@ -1,14 +1,20 @@
 import React from 'react';
-import Filtro from './Filtro';
+import Filter from './Filter';
 import ShowCase from './ShowCase';
 import ProductService from '../../service/ProductService';
+import Carousel from '../jsClient/Carousel';
+import FilterLogic from '../jsClient/FilterLogic';
 
-const Body = React.createClass({
+var Body = React.createClass({
 
     getInitialState(){
         return {
-            products:null
+            products:null,
+            filters:[]
         }
+    },
+    componentDidUpdate (){
+        Carousel.organizes();
     },
     componentDidMount(){
 
@@ -16,8 +22,28 @@ const Body = React.createClass({
 
         ProductService.getProducts().then(function(response){
             this.setState({products:response.data});
+            FilterLogic.itemArray = JSON.parse(JSON.stringify(response.data));//Cloning Object
             //self.setState...
         }.bind(this));
+    },
+    setFilter(event){
+        
+        event = event ? event : window.event;
+        var elem = event.target ? event.target : event.srcElement;
+        var productFilter = this.state.products;
+
+        if(elem.checked){
+            FilterLogic.addFilter(elem.getAttribute('name'), elem.value);
+        }else{
+            FilterLogic.removeFilter(elem.getAttribute('name'), elem.value);
+        }
+
+
+        for(var prop in productFilter){
+            productFilter[prop] = FilterLogic.filterLogic(prop);
+        }
+
+        this.setState({products:productFilter});
     },
     render(){
 
@@ -31,7 +57,7 @@ const Body = React.createClass({
         return(
             <section className="body">
                 <div className="row">
-                    <Filtro />
+                    <Filter filterFunc={this.setFilter}/>
                     {showCases}
                 </div>
             </section>
