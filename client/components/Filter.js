@@ -1,4 +1,5 @@
 import React from 'react';
+import BtnAllProducts from './BtnAllProducts';
 
 var Filtro = React .createClass({
 
@@ -37,7 +38,7 @@ var Filtro = React .createClass({
                     </menu>
                 </div>
                 <div className="filter">
-                    <a className="btn btn-default">TODOS OS PRODUTOS</a>
+                    <BtnAllProducts />
                 </div>
             </div>
         )

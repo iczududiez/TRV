@@ -175,6 +175,24 @@ Carousel.movementLogic = function(direction,moves){
 
 }
 
+Carousel.removeAllCarousel = function(){
+
+    var itens = document.getElementsByClassName('carousel-item'); 
+    var carousels = document.getElementsByClassName('carousel');
+
+    for(var i = 0, v = itens.length; i < v; i++){
+        if((i+1) % 4){
+            itens[i].setAttribute("style","");
+        }else{
+            itens[i].setAttribute("style","margin-right:0;");
+        }
+    }
+
+    while(carousels.length){
+        removeClass(carousels[0],"carousel");
+    }
+
+}
 
 /* util Functions */
 function getSiblingsByClassName(elem, classSiblingElem){

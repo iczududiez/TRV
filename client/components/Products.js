@@ -8,7 +8,7 @@ var Products = React.createClass({
         var products = this.props.products.map(function(productItem, key){
             if(productItem.filter == null ? true : productItem.filter){
                 return (
-                    <div key={key.toString()} className="product carousel-item">
+                    <div key={key.toString()} className={(key +1) % 4 ? "product carousel-item" : "product carousel-item noMarginRight"}>
                         <figure>
                             <img src={productItem.image}/>
                         </figure>

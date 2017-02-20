@@ -9,8 +9,7 @@ app.use('/', function(req, res){
     res.sendFile(path.resolve('client/index.html'));
 });
 
-//Dava uns erros louco e tinha que mudar de porta kkkkkkkkk!!
-var port = 3010;
+var port = 3001;
 
 app.listen(port, function(error){
     if(error) throw error;

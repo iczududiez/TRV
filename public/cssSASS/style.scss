@@ -257,10 +257,12 @@ a.btn-buy{
     flex-wrap: wrap;
     position: relative;}
 
+
+
 .product{
     width: 22%;
     padding: 2% 3% 0%;
-    margin-right:3%;
+    margin-right: 4%;
     text-align: center;}
 
 .product:hover > .details{
@@ -326,16 +328,20 @@ a.btn-buy{
     position: absolute;}
 
 .carousel-control{
-    display:none;}
-
-.carousel .carousel-control{
     width: 100%;
-    height:  $lineBase + px;
+    height:  $lineBase * 2 + px;
     @include displayInlineBlock();
     text-align: center;}
 
+.carousel .carousel-control{
+    height:  $lineBase + px;
+}
+
+.carousel-control .item-control{
+    display:none;}
 
 .carousel .carousel-control .item-control{
+    @include displayInlineBlock();
     vertical-align: middle;
     background: #d1d1d1;}
 
@@ -345,6 +351,11 @@ a.btn-buy{
 /* BODY >> carousel */
 
 /* BODY */
+
+
+
+.noMarginRight{
+    margin-right:0px; }
 
 /* MEDIA */
 @media (min-width: 1600px){
@@ -414,6 +425,7 @@ a.btn-buy{
         &:hover ~ span {
             color: #333;
         }
-    }}
+    }
+}
 
 

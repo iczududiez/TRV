@@ -26,7 +26,7 @@ module.exports = {
                 }
             }
 
-            return ret;
+            return this.filters.length  ? ret : true;
 
         }.bind(this));
     }

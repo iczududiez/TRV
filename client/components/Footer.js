@@ -1,5 +1,5 @@
 import React from 'react';
-import path from 'path';
+import BtnAllProducts from './BtnAllProducts';
 import banner from '../../public/image/banner-footer.png';
 
 //Stateless
@@ -12,7 +12,7 @@ function Footer(){
                     </div>
                     <div className="footer-menu">
                         <p>JUST DO IT.</p>
-                        <a className="btn btn-default btn-footer">TODOS OS PRODUTOS</a>
+                        <BtnAllProducts addClass={"btn-footer"} />
                     </div>
                 </div>
                 <div className="copyright">

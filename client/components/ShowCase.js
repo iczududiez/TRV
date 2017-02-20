@@ -13,8 +13,9 @@ var ShowCase = React.createClass({
     render(){
 
         var carouselControl = [];
-        var size = this.props.products.filter(function(item){ return item.filter == null ? true : item.filter}).length;
-        size = size- 3 > 1 ? size - 3: 0;
+        
+        //Logic for Filter
+        var size = this.props.products.length - 3 > 1 ? this.props.products.length - 3: 0;
         for(let i = 0, v = size; i < v; i++){
             carouselControl.push(<span key={i} onClick={this.moveCarousel} className={!i ? "item-control bullet active" : "item-control bullet"}></span>);
         }
