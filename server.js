@@ -9,7 +9,7 @@ app.use('*', function(req, res){
     res.sendFile(path.resolve('client/index.html'));
 });
 
-var port = 3003;
+var port = 3000;
 
 app.listen(port, function(error){
     if(error) throw error;

@@ -8,7 +8,9 @@ function Footer(){
         <footer>
             <div className="row">
                     <div className="banner">
-                        <img src={banner} alt="Banner JUST DO IT."/>
+                        <figure>
+                            <img src={banner} alt="Banner JUST DO IT."/>
+                        </figure>
                     </div>
                     <div className="footer-menu">
                         <p>JUST DO IT.</p>

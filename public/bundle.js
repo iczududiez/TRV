@@ -4912,7 +4912,7 @@ var Carousel = {
             var itensControl = getChildrensByClass(getChildrensByClass(elem, 'carousel-control'), "item-control");
             var elemActive = getChildrensByClass(itensControl[0] ? itensControl[0].parentElement : null, "active")[0];
             var itemWidth = itens[0].clientWidth;
-            var marginItem = Math.ceil((elem.clientWidth - itemWidth * 4) / 3);
+            var marginItem = Math.ceil((elem.clientWidth - itemWidth * 4) / 3) - 3;
             var startMargin = elemActive && elemActive.getAttribute("carControl") ? (itemWidth + marginItem) * parseInt(elemActive.getAttribute("carControl")) * -1 : 0;
 
             function itemMargin(item, index) {
@@ -10624,7 +10624,8 @@ var Body = _react2.default.createClass({
     getInitialState: function getInitialState() {
         return {
             products: null,
-            filters: []
+            filters: [],
+            message: null
         };
     },
     componentDidUpdate: function componentDidUpdate() {
@@ -10635,9 +10636,14 @@ var Body = _react2.default.createClass({
         //Or var self = this;
 
         _ProductService2.default.getProducts().then(function (response) {
-            this.setState({ products: response.data });
-            _FilterLogic2.default.itemArray = JSON.parse(JSON.stringify(response.data)); //Cloning Object
-            //self.setState...
+            if (response) {
+                this.setState({ products: response.data });
+                _FilterLogic2.default.itemArray = Object.assign({}, response.data); //Cloning Object
+                Object.assign;
+                //self.setState...
+            } else {
+                this.setState({ message: "Não encontramos nenhum produto. :/" });
+            }
         }.bind(this));
     },
     setFilter: function setFilter(event) {
@@ -10662,20 +10668,34 @@ var Body = _react2.default.createClass({
 
         var showCases = Object.getOwnPropertyNames(this.state.products || {}).map(function (item, key) {
             return _react2.default.createElement(_ShowCase2.default, {
-                key: key.toString(),
+                key: key,
                 products: this.state.products[item],
                 name: item });
         }.bind(this));
 
+        var returnHTML = showCases.length ? _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(_Filter2.default, { filterFunc: this.setFilter }),
+            showCases
+        ) : _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+                'div',
+                { className: 'message' },
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    this.state.message
+                )
+            )
+        );
+
         return _react2.default.createElement(
             'section',
             { className: 'body' },
-            _react2.default.createElement(
-                'div',
-                { className: 'row' },
-                _react2.default.createElement(_Filter2.default, { filterFunc: this.setFilter }),
-                showCases
-            )
+            returnHTML
         );
     }
 });
@@ -10703,8 +10723,8 @@ var _BtnAllProducts2 = _interopRequireDefault(_BtnAllProducts);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Filtro = _react2.default.createClass({
-    displayName: 'Filtro',
+var Filter = _react2.default.createClass({
+    displayName: 'Filter',
     render: function render() {
         return _react2.default.createElement(
             'div',
@@ -10783,7 +10803,11 @@ var Filtro = _react2.default.createClass({
     }
 });
 
-exports.default = Filtro;
+Filter.propTypes = {
+    filterFunc: _react2.default.PropTypes.func.isRequired
+};
+
+exports.default = Filter;
 
 /***/ }),
 /* 94 */
@@ -10821,7 +10845,11 @@ function Footer() {
             _react2.default.createElement(
                 'div',
                 { className: 'banner' },
-                _react2.default.createElement('img', { src: _bannerFooter2.default, alt: 'Banner JUST DO IT.' })
+                _react2.default.createElement(
+                    'figure',
+                    null,
+                    _react2.default.createElement('img', { src: _bannerFooter2.default, alt: 'Banner JUST DO IT.' })
+                )
             ),
             _react2.default.createElement(
                 'div',
@@ -10867,6 +10895,10 @@ var _Menu = __webpack_require__(96);
 
 var _Menu2 = _interopRequireDefault(_Menu);
 
+var _bannerHeader = __webpack_require__(221);
+
+var _bannerHeader2 = _interopRequireDefault(_bannerHeader);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Header = _react2.default.createClass({
@@ -10887,7 +10919,11 @@ var Header = _react2.default.createClass({
                         _react2.default.createElement(
                             'a',
                             null,
-                            _react2.default.createElement('img', { src: 'http://www.raphaelfabeni.com.br/rv/images/nike-logo.png', alt: 'Logo' })
+                            _react2.default.createElement(
+                                'figure',
+                                null,
+                                _react2.default.createElement('img', { src: 'http://www.raphaelfabeni.com.br/rv/images/nike-logo.png', alt: 'Logo' })
+                            )
                         )
                     ),
                     _react2.default.createElement(
@@ -10908,7 +10944,7 @@ var Header = _react2.default.createClass({
                 _react2.default.createElement(
                     'div',
                     { className: 'banner' },
-                    _react2.default.createElement('img', { src: 'http://www.raphaelfabeni.com.br/rv/images/banner.png', alt: 'Main Banner' })
+                    _react2.default.createElement('img', { src: _bannerHeader2.default, alt: 'Main Banner' })
                 )
             )
         );
@@ -11072,6 +11108,10 @@ var Products = _react2.default.createClass({
     }
 });
 
+Products.propTypes = {
+    products: _react2.default.PropTypes.array.isRequired
+};
+
 exports.default = Products;
 
 /***/ }),
@@ -11143,6 +11183,10 @@ var ShowCase = _react2.default.createClass({
         );
     }
 });
+
+ShowCase.propTypes = {
+    products: _react2.default.PropTypes.array.isRequired
+};
 
 exports.default = ShowCase;
 
@@ -24300,7 +24344,7 @@ module.exports = traverseAllChildren;
 
 
 Object.defineProperty(exports, "__esModule", {
-   value: true
+    value: true
 });
 
 var _axios = __webpack_require__(100);
@@ -24312,9 +24356,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //var Axios = require('axios');
 
 var ProductService = {
-   getProducts: function getProducts() {
-      return _axios2.default.get('http://www.raphaelfabeni.com.br/rv/data.json');
-   }
+    getProducts: function getProducts() {
+        return _axios2.default.get('http://www.raphaelfabeni.com.br/rv/data.json').catch(function (error) {
+            if (error.response) {
+                console.log("Error " + error.response.status + " no serviço " + error.response.config.url);
+            }
+        });
+    }
 };
 
 exports.default = ProductService;
@@ -24328,7 +24376,7 @@ exports = module.exports = __webpack_require__(118)();
 
 
 // module
-exports.push([module.i, "/*responsive* /\r\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\r\n/* RESET CSS */\r\nhtml, body, div, span, applet, object, iframe,\r\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\r\na, abbr, acronym, address, big, cite, code,\r\ndel, dfn, em, img, ins, kbd, q, s, samp,\r\nsmall, strike, strong, sub, sup, tt, var,\r\nb, u, i, center,\r\ndl, dt, dd, ol, ul, li,\r\nfieldset, form, label, legend,\r\ntable, caption, tbody, tfoot, thead, tr, th, td,\r\narticle, aside, canvas, details, embed,\r\nfigure, figcaption, footer, header, hgroup,\r\nmenu, nav, output, ruby, section, summary,\r\ntime, mark, audio, video {\r\n  margin: 0;\r\n  padding: 0;\r\n  border: 0;\r\n  font-size: 100%;\r\n  font: inherit;\r\n  vertical-align: baseline; }\r\n\r\n/* HTML5 display-role reset for older browsers */\r\narticle, aside, details, div, figcaption, figure, footer, header, hgroup, menu, nav, section {\r\n  display: block;\r\n  box-sizing: border-box;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box; }\r\n\r\nbody {\r\n  line-height: 1; }\r\n\r\nol, ul {\r\n  list-style: none; }\r\n\r\nblockquote, q {\r\n  quotes: none; }\r\n\r\nblockquote:before, blockquote:after,\r\nq:before, q:after {\r\n  content: '';\r\n  content: none; }\r\n\r\ntable {\r\n  border-collapse: collapse;\r\n  border-spacing: 0; }\r\n\r\n/* RESET CSS */\r\n/** ELEMENTS **/\r\na {\r\n  text-decoration: none;\r\n  color: #000;\r\n  cursor: pointer; }\r\n\r\nh3 {\r\n  margin-bottom: 25px; }\r\n\r\nnav .vertical {\r\n  display: flex;\r\n  flex-direction: row; }\r\n\r\n/* HEADER */\r\nheader .item-Header {\r\n  padding-top: 1.5625%;\r\n  padding-bottom: 1.5625%; }\r\n\r\nheader .logo {\r\n  width: 8.59375%;\r\n  padding-right: 3.125%; }\r\n\r\nheader .nav-bar {\r\n  width: 85.9375%;\r\n  font-size: 14px;\r\n  font-size: 0.875rem;\r\n  display: flex;\r\n  align-items: center; }\r\n\r\nheader .nav-bar ul {\r\n  display: flex;\r\n  align-items: center; }\r\n\r\nheader .nav-bar ul li {\r\n  margin-right: 4%; }\r\n\r\nheader .cart {\r\n  width: 8.59375%;\r\n  padding-left: 3.125%; }\r\n\r\nheader .cart img {\r\n  /*width: $largeColumnBase * 0.75 + px;*/\r\n  height: 37.5px;\r\n  margin: 0px 17.5px; }\r\n\r\n/* HEADER */\r\n/* FOOTER */\r\nfooter .footer-menu {\r\n  color: #000;\r\n  z-index: 1;\r\n  position: absolute;\r\n  top: 40%;\r\n  left: 0px;\r\n  width: 100%;\r\n  text-align: center; }\r\n\r\nfooter .footer-menu p {\r\n  font-size: 72px;\r\n  font-size: 4.5rem;\r\n  color: #fff;\r\n  font-weight: 900; }\r\n\r\nfooter .footer-menu a.btn {\r\n  margin-top: 20px;\r\n  left: 43.39403%; }\r\n\r\nfooter .copyright {\r\n  height: 25px;\r\n  color: #999999;\r\n  text-align: center;\r\n  font-weight: normal;\r\n  margin-top: 25px; }\r\n\r\n/* FOOTER */\r\n/** ID, CLASSES AND SELECTORS**/\r\n:root {\r\n  font-size: 16px; }\r\n\r\n#app {\r\n  width: 100%;\r\n  max-width: 1600px;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  padding: 0 7.5%;\r\n  font-family: \"Roboto\", \"sans serif\";\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  font-weight: bold; }\r\n\r\n.container {\r\n  width: 100%;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  padding: 0 2.5%;\r\n  display: flex;\r\n  position: relative; }\r\n\r\n.container-padLine1-3 {\r\n  padding-top: 25px;\r\n  padding-bottom: 75px; }\r\n\r\n.container-noFlex {\r\n  display: block; }\r\n\r\n.row {\r\n  margin-left: -5px;\r\n  margin-right: -5px;\r\n  position: relative; }\r\n  .row:before {\r\n    content: \"\";\r\n    display: table; }\r\n  .row:after {\r\n    content: \"\";\r\n    display: table;\r\n    clear: both; }\r\n\r\na.btn {\r\n  display: block;\r\n  color: #fff;\r\n  background: #313131;\r\n  padding: 15px;\r\n  font-size: 13px;\r\n  font-size: 0.8125rem;\r\n  -webkit-border-radius: 4px;\r\n  -moz-border-radius: 4px;\r\n  border-radius: 4px;\r\n  text-align: center;\r\n  position: relative; }\r\n\r\na.btn-default {\r\n  max-width: 145px;\r\n  min-width: 145px; }\r\n\r\na.btn-buy {\r\n  text-align: center;\r\n  margin-top: 20px;\r\n  background: #ff5c2b; }\r\n\r\n.bullet {\r\n  display: inline-block;\r\n  /* IE Hack*/\r\n  *zoom: 1;\r\n  *display: inline;\r\n  width: 9px;\r\n  height: 9px;\r\n  background: #a1a1a1;\r\n  margin: 0px 5px;\r\n  cursor: pointer;\r\n  -webkit-border-radius: 10px;\r\n  -moz-border-radius: 10px;\r\n  border-radius: 10px; }\r\n\r\n.banner {\r\n  margin-left: -120px; }\r\n\r\n.flex-border {\r\n  display: flex;\r\n  width: 100%;\r\n  border-bottom: 1px solid #d1d1d1; }\r\n\r\n/* BODY */\r\n/* BODY >> FILTER */\r\n.filter {\r\n  display: flex;\r\n  align-items: center;\r\n  height: 75px;\r\n  font-size: 18px;\r\n  font-size: 1.125rem; }\r\n\r\n.filter-title {\r\n  width: 17.1875%; }\r\n\r\n.item-filter {\r\n  width: 20%; }\r\n\r\n.filter-options {\r\n  width: 68.75%;\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  color: #999; }\r\n\r\n.filter-options menu {\r\n  width: 100%; }\r\n\r\n.filter-options ul {\r\n  display: flex;\r\n  align-items: center; }\r\n\r\n.filter-options input[type=\"checkbox\"] {\r\n  height: 15px;\r\n  margin-right: 15px; }\r\n\r\n/* BODY >> FILTER */\r\n/* BODY >> PRODUCTS */\r\n.products {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  position: relative; }\r\n\r\n.product {\r\n  width: 22%;\r\n  padding: 1% 3% 1%;\r\n  margin-right: 4%;\r\n  text-align: center; }\r\n  .product:hover {\r\n    border: 1px solid #d1d1d1; }\r\n  .product:hover > .details > .person {\r\n    padding-bottom: 5px;\r\n    border-bottom: 1px solid #d1d1d1; }\r\n  .product:hover > .details {\r\n    margin-top: -20px; }\r\n  .product:hover > .details > a.btn {\r\n    visibility: visible; }\r\n\r\n.product .details {\r\n  text-align: left; }\r\n\r\n.product .details a.person {\r\n  font-size: 12px;\r\n  font-size: 0.75rem;\r\n  width: 100%;\r\n  display: block;\r\n  color: #666666; }\r\n  .product .details a.person:before {\r\n    content: '';\r\n    display: inline-block;\r\n    /* IE Hack*/\r\n    *zoom: 1;\r\n    *display: inline;\r\n    width: 16px;\r\n    height: 16px;\r\n    background: url(\"http://www.raphaelfabeni.com.br/rv/images/personalize.jpg\");\r\n    /* cut margin inline */\r\n    margin-bottom: -3px;\r\n    margin-right: 5px; }\r\n\r\n.product .details span {\r\n  display: block;\r\n  margin-top: 10px;\r\n  font-size: 14px;\r\n  font-size: 0.875rem; }\r\n\r\n.product .details span.describle {\r\n  font-weight: normal;\r\n  color: #999; }\r\n\r\n.product .details span.price {\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  color: #666666; }\r\n\r\n.product .details span.times {\r\n  font-size: 14px;\r\n  font-size: 0.875rem;\r\n  font-weight: normal;\r\n  color: #666666; }\r\n\r\n.product .details a.btn {\r\n  visibility: hidden; }\r\n\r\n/* BODY >> PRODUCTS */\r\n/* BODY >> carousel */\r\n.carousel {\r\n  position: relative;\r\n  overflow: hidden;\r\n  height: 475px; }\r\n\r\n.carousel .carousel-panel {\r\n  position: relative;\r\n  height: 425px; }\r\n\r\n.carousel .carousel-item {\r\n  position: absolute; }\r\n\r\n.carousel-control {\r\n  width: 100%;\r\n  height: 50px;\r\n  display: inline-block;\r\n  /* IE Hack*/\r\n  *zoom: 1;\r\n  *display: inline;\r\n  text-align: center; }\r\n\r\n.carousel .carousel-control {\r\n  height: 25px; }\r\n\r\n.carousel-control .item-control {\r\n  display: none; }\r\n\r\n.carousel .carousel-control .item-control {\r\n  display: inline-block;\r\n  /* IE Hack*/\r\n  *zoom: 1;\r\n  *display: inline;\r\n  vertical-align: middle;\r\n  background: #d1d1d1; }\r\n\r\n.carousel .carousel-control .item-control.active {\r\n  background: #a1a1a1; }\r\n\r\n/* BODY >> carousel */\r\n/* BODY */\r\n.noMarginRight {\r\n  margin-right: 0px; }\r\n\r\n/* MEDIA */\r\n@media (min-width: 1600px) {\r\n  .carousel .carousel-item {\r\n    max-width: 277px; } }\r\n@media (max-width: 1340px) {\r\n  #app {\r\n    padding: 0; }\r\n\r\n  .item-filter span {\r\n    display: inline-block;\r\n    width: 65%; } }\r\n@media (max-width: 1050px) {\r\n  .product img {\r\n    height: 160px; } }\r\n@media (max-width: 972px) {\r\n  .item-filter {\r\n    width: 25%; } }\r\n@media (max-width: 920px) {\r\n  .product img {\r\n    height: 120px; } }\r\n/* MEDIA */\r\n@-moz-document url-prefix() {\r\n  .product {\r\n    padding: 2% 3% 5%; }\r\n\r\n  header .item-Header {\r\n    padding-top: 15px;\r\n    margin-bottom: 15px; } }\r\n/* https://codepen.io/bbodine1/pen/novBm */\r\n.squaredTwo {\r\n  height: 20px;\r\n  position: relative;\r\n  background: #fff; }\r\n  .squaredTwo input[type=checkbox] {\r\n    visibility: hidden; }\r\n    .squaredTwo input[type=checkbox]:checked + label:after {\r\n      opacity: 1; }\r\n    .squaredTwo input[type=checkbox]:checked ~ span {\r\n      color: #333; }\r\n  .squaredTwo label {\r\n    width: 20px;\r\n    height: 20px;\r\n    cursor: pointer;\r\n    position: absolute;\r\n    left: 0px;\r\n    top: 0px;\r\n    background: #fff;\r\n    border: 1px solid #ccc; }\r\n    .squaredTwo label:after {\r\n      content: '';\r\n      width: 9px;\r\n      height: 5px;\r\n      position: absolute;\r\n      top: 4px;\r\n      left: 4px;\r\n      border: 3px solid #333;\r\n      border-top: none;\r\n      border-right: none;\r\n      background: transparent;\r\n      opacity: 0;\r\n      -webkit-transform: rotate(-45deg);\r\n      -moz-transform: rotate(-45deg);\r\n      transform: rotate(-45deg); }\r\n    .squaredTwo label:hover::after {\r\n      opacity: 0.3; }\r\n    .squaredTwo label:hover ~ span {\r\n      color: #333; }\r\n\r\n/*# sourceMappingURL=style.css.map */\r\n", ""]);
+exports.push([module.i, "/*responsive* /\r\n/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\r\n/* RESET CSS */\r\nhtml, body, div, span, applet, object, iframe,\r\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\r\na, abbr, acronym, address, big, cite, code,\r\ndel, dfn, em, img, ins, kbd, q, s, samp,\r\nsmall, strike, strong, sub, sup, tt, var,\r\nb, u, i, center,\r\ndl, dt, dd, ol, ul, li,\r\nfieldset, form, label, legend,\r\ntable, caption, tbody, tfoot, thead, tr, th, td,\r\narticle, aside, canvas, details, embed,\r\nfigure, figcaption, footer, header, hgroup,\r\nmenu, nav, output, ruby, section, summary,\r\ntime, mark, audio, video {\r\n  margin: 0;\r\n  padding: 0;\r\n  border: 0;\r\n  font-size: 100%;\r\n  font: inherit;\r\n  vertical-align: baseline; }\r\n\r\n/* HTML5 display-role reset for older browsers */\r\narticle, aside, details, div, figcaption, figure, footer, header, hgroup, menu, nav, section {\r\n  display: block;\r\n  box-sizing: border-box;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box; }\r\n\r\nbody {\r\n  line-height: 1; }\r\n\r\nol, ul {\r\n  list-style: none; }\r\n\r\nblockquote, q {\r\n  quotes: none; }\r\n\r\nblockquote:before, blockquote:after,\r\nq:before, q:after {\r\n  content: '';\r\n  content: none; }\r\n\r\ntable {\r\n  border-collapse: collapse;\r\n  border-spacing: 0; }\r\n\r\n/* RESET CSS */\r\n/** ELEMENTS **/\r\na {\r\n  text-decoration: none;\r\n  color: #000;\r\n  cursor: pointer; }\r\n\r\nh3 {\r\n  margin-bottom: 25px; }\r\n\r\nnav .vertical {\r\n  display: flex;\r\n  flex-direction: row; }\r\n\r\n/* HEADER */\r\nheader .item-Header {\r\n  padding-top: 1.5625%;\r\n  padding-bottom: 1.5625%; }\r\n\r\nheader .logo {\r\n  width: 8.59375%;\r\n  padding-right: 3.125%; }\r\n\r\nheader .nav-bar {\r\n  width: 85.9375%;\r\n  font-size: 14px;\r\n  font-size: 0.875rem;\r\n  display: flex;\r\n  align-items: center; }\r\n\r\nheader .nav-bar ul {\r\n  display: flex;\r\n  align-items: center; }\r\n\r\nheader .nav-bar ul li {\r\n  margin-right: 4%; }\r\n\r\nheader .cart {\r\n  width: 8.59375%;\r\n  padding-left: 3.125%; }\r\n\r\nheader .cart img {\r\n  /*width: $largeColumnBase * 0.75 + px;*/\r\n  height: 37.5px;\r\n  margin: 0px 17.5px; }\r\n\r\n/* HEADER */\r\n/* FOOTER */\r\nfooter .footer-menu {\r\n  color: #000;\r\n  z-index: 1;\r\n  position: absolute;\r\n  top: 40%;\r\n  left: 0px;\r\n  width: 100%;\r\n  text-align: center; }\r\n\r\nfooter .footer-menu p {\r\n  font-size: 72px;\r\n  font-size: 4.5rem;\r\n  color: #fff;\r\n  font-weight: 900; }\r\n\r\nfooter .footer-menu a.btn {\r\n  margin-top: 20px;\r\n  left: 43.39403%; }\r\n\r\nfooter .copyright {\r\n  height: 25px;\r\n  color: #999999;\r\n  text-align: center;\r\n  font-weight: normal;\r\n  margin-top: 25px; }\r\n\r\n/* FOOTER */\r\n/** ID, CLASSES AND SELECTORS**/\r\n:root {\r\n  font-size: 16px; }\r\n\r\n#app {\r\n  width: 100%;\r\n  max-width: 1600px;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  padding: 0 7.5%;\r\n  font-family: \"Roboto\", \"sans serif\";\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  font-weight: bold; }\r\n\r\n.container {\r\n  width: 100%;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  padding: 0 2.5%;\r\n  display: flex;\r\n  position: relative; }\r\n\r\n.container-padLine1-3 {\r\n  padding-top: 25px;\r\n  padding-bottom: 75px; }\r\n\r\n.container-noFlex {\r\n  display: block; }\r\n\r\n.row {\r\n  margin-left: -5px;\r\n  margin-right: -5px;\r\n  position: relative; }\r\n  .row:before {\r\n    content: \"\";\r\n    display: table; }\r\n  .row:after {\r\n    content: \"\";\r\n    display: table;\r\n    clear: both; }\r\n\r\na.btn {\r\n  display: block;\r\n  color: #fff;\r\n  background: #313131;\r\n  padding: 15px;\r\n  font-size: 13px;\r\n  font-size: 0.8125rem;\r\n  -webkit-border-radius: 4px;\r\n  -moz-border-radius: 4px;\r\n  border-radius: 4px;\r\n  text-align: center;\r\n  position: relative; }\r\n\r\na.btn-default {\r\n  max-width: 145px;\r\n  min-width: 145px; }\r\n\r\na.btn-buy {\r\n  text-align: center;\r\n  margin-top: 20px;\r\n  background: #ff5c2b; }\r\n\r\n.bullet {\r\n  display: inline-block;\r\n  /* IE Hack*/\r\n  *zoom: 1;\r\n  *display: inline;\r\n  width: 9px;\r\n  height: 9px;\r\n  background: #a1a1a1;\r\n  margin: 0px 5px;\r\n  cursor: pointer;\r\n  -webkit-border-radius: 10px;\r\n  -moz-border-radius: 10px;\r\n  border-radius: 10px; }\r\n\r\n.banner {\r\n  margin-left: -120px; }\r\n\r\n.flex-border {\r\n  display: flex;\r\n  width: 100%;\r\n  border-bottom: 1px solid #d1d1d1; }\r\n\r\n/* BODY */\r\n.message {\r\n  width: 100%;\r\n  height: 200px;\r\n  text-align: center; }\r\n\r\n.message h2 {\r\n  color: #d1d1d1;\r\n  padding-top: 75px;\r\n  font-size: 50px;\r\n  font-size: 3.125rem; }\r\n\r\n/* BODY >> FILTER */\r\n.filter {\r\n  display: flex;\r\n  align-items: center;\r\n  height: 75px;\r\n  font-size: 18px;\r\n  font-size: 1.125rem; }\r\n\r\n.filter-title {\r\n  width: 17.1875%; }\r\n\r\n.item-filter {\r\n  width: 20%; }\r\n\r\n.filter-options {\r\n  width: 68.75%;\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  color: #999; }\r\n\r\n.filter-options menu {\r\n  width: 100%; }\r\n\r\n.filter-options ul {\r\n  display: flex;\r\n  align-items: center; }\r\n\r\n.filter-options input[type=\"checkbox\"] {\r\n  height: 15px;\r\n  margin-right: 15px; }\r\n\r\n/* BODY >> FILTER */\r\n/* BODY >> PRODUCTS */\r\n.products {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  position: relative; }\r\n\r\n.product {\r\n  width: 22%;\r\n  padding: 1% 3% 1%;\r\n  margin-right: 4%;\r\n  text-align: center; }\r\n  .product:hover {\r\n    border: 1px solid #d1d1d1; }\r\n  .product:hover .details .person {\r\n    padding-bottom: 5px;\r\n    border-bottom: 1px solid #d1d1d1; }\r\n  .product:hover .details {\r\n    margin-top: -20px; }\r\n  .product:hover .details a.btn {\r\n    visibility: visible; }\r\n\r\n.product .details {\r\n  text-align: left; }\r\n\r\n.product .details a.person {\r\n  font-size: 12px;\r\n  font-size: 0.75rem;\r\n  width: 100%;\r\n  display: block;\r\n  color: #666666; }\r\n  .product .details a.person:before {\r\n    content: '';\r\n    display: inline-block;\r\n    /* IE Hack*/\r\n    *zoom: 1;\r\n    *display: inline;\r\n    width: 16px;\r\n    height: 16px;\r\n    background: url(" + __webpack_require__(222) + ");\r\n    /* cut margin inline */\r\n    margin-bottom: -3px;\r\n    margin-right: 5px; }\r\n\r\n.product .details span {\r\n  display: block;\r\n  margin-top: 10px;\r\n  font-size: 14px;\r\n  font-size: 0.875rem; }\r\n\r\n.product .details span.describle {\r\n  font-weight: normal;\r\n  color: #999; }\r\n\r\n.product .details span.price {\r\n  font-size: 16px;\r\n  font-size: 1rem;\r\n  color: #666666; }\r\n\r\n.product .details span.times {\r\n  font-size: 14px;\r\n  font-size: 0.875rem;\r\n  font-weight: normal;\r\n  color: #666666; }\r\n\r\n.product .details a.btn {\r\n  visibility: hidden; }\r\n\r\n/* BODY >> PRODUCTS */\r\n/* BODY >> carousel */\r\n.carousel {\r\n  position: relative;\r\n  overflow: hidden;\r\n  height: 475px; }\r\n\r\n.carousel .carousel-panel {\r\n  position: relative;\r\n  height: 425px; }\r\n\r\n.carousel .carousel-item {\r\n  position: absolute; }\r\n\r\n.carousel-control {\r\n  width: 100%;\r\n  height: 50px;\r\n  display: inline-block;\r\n  /* IE Hack*/\r\n  *zoom: 1;\r\n  *display: inline;\r\n  text-align: center; }\r\n\r\n.carousel .carousel-control {\r\n  height: 25px; }\r\n\r\n.carousel-control .item-control {\r\n  display: none; }\r\n\r\n.carousel .carousel-control .item-control {\r\n  display: inline-block;\r\n  /* IE Hack*/\r\n  *zoom: 1;\r\n  *display: inline;\r\n  vertical-align: middle;\r\n  background: #d1d1d1; }\r\n\r\n.carousel .carousel-control .item-control.active {\r\n  background: #a1a1a1; }\r\n\r\n/* BODY >> carousel */\r\n/* BODY */\r\n.noMarginRight {\r\n  margin-right: 0px; }\r\n\r\n/* MEDIA */\r\n@media (max-width: 1340px) {\r\n  #app {\r\n    padding: 0; }\r\n\r\n  .item-filter span {\r\n    display: inline-block;\r\n    width: 65%; } }\r\n@media (max-width: 1220px) {\r\n  .banner {\r\n    margin-left: 0; }\r\n\r\n  .banner img {\r\n    height: 440.8px; } }\r\n@media (max-width: 1050px) {\r\n  .product img {\r\n    height: 160px; } }\r\n@media (max-width: 972px) {\r\n  .item-filter {\r\n    width: 25%; } }\r\n@media (max-width: 920px) {\r\n  .product img {\r\n    height: 120px; }\r\n\r\n  .banner img {\r\n    height: 330.6px; } }\r\n/* MEDIA */\r\n@-moz-document url-prefix() {\r\n  .product {\r\n    padding: 2% 3% 5%; }\r\n\r\n  header .item-Header {\r\n    padding-top: 15px;\r\n    margin-bottom: 15px; } }\r\n/* https://codepen.io/bbodine1/pen/novBm */\r\n.squaredTwo {\r\n  height: 20px;\r\n  position: relative;\r\n  background: #fff; }\r\n  .squaredTwo input[type=checkbox] {\r\n    visibility: hidden; }\r\n    .squaredTwo input[type=checkbox]:checked + label:after {\r\n      opacity: 1; }\r\n    .squaredTwo input[type=checkbox]:checked ~ span {\r\n      color: #333; }\r\n  .squaredTwo label {\r\n    width: 20px;\r\n    height: 20px;\r\n    cursor: pointer;\r\n    position: absolute;\r\n    left: 0px;\r\n    top: 0px;\r\n    background: #fff;\r\n    border: 1px solid #ccc; }\r\n    .squaredTwo label:after {\r\n      content: '';\r\n      width: 9px;\r\n      height: 5px;\r\n      position: absolute;\r\n      top: 4px;\r\n      left: 4px;\r\n      border: 3px solid #333;\r\n      border-top: none;\r\n      border-right: none;\r\n      background: transparent;\r\n      opacity: 0;\r\n      -webkit-transform: rotate(-45deg);\r\n      -moz-transform: rotate(-45deg);\r\n      transform: rotate(-45deg); }\r\n    .squaredTwo label:hover::after {\r\n      opacity: 0.3; }\r\n    .squaredTwo label:hover ~ span {\r\n      color: #333; }\r\n\r\n/*# sourceMappingURL=style.css.map */\r\n", ""]);
 
 // exports
 
@@ -24637,6 +24685,18 @@ var _App2 = _interopRequireDefault(_App);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _reactDom.render)(_react2.default.createElement(_App2.default, null), document.getElementById("app"));
+
+/***/ }),
+/* 221 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "fcd2ccfa561079c26ee0d8c7f6c1c2a8.png";
+
+/***/ }),
+/* 222 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "5eb9b35a785bad060636e4d7aa05893d.jpg";
 
 /***/ })
 /******/ ]);

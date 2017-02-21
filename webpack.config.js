@@ -12,9 +12,9 @@ module.exports = {
             {
                 test:/\.(js|jsx|es6)$/,
                 exclude: '/node_modules/',
-                loader:'babel-loader',
+                loaders:['babel-loader','eslint-loader'],
                 query:{
-                    presets:['react','es2015']
+                    presets:['react','es2015','eslint']
                 }
             },{
                 test: /\.css$/,
@@ -35,7 +35,7 @@ module.exports = {
                         }
                     }
                 ],
-                include: path.resolve('./public/image')
+                include: path.resolve('./public/image/')
             }
         ]
     }

@@ -33,6 +33,10 @@ var Products = React.createClass({
             </section>
         )
     }
-})
+});
+
+Products.propTypes = {
+    products: React.PropTypes.array.isRequired
+}
 
 export default Products;

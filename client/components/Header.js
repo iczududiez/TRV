@@ -1,5 +1,6 @@
 import React from 'react';
 import Menu from './Menu.js';
+import banner from '../../public/image/banner-header.png';
 
 var Header = React.createClass({
 
@@ -10,7 +11,9 @@ var Header = React.createClass({
                     <div className="container">
                         <div className="item-Header logo">
                             <a>
-                                <img src="http://www.raphaelfabeni.com.br/rv/images/nike-logo.png" alt="Logo"/>
+                                <figure>
+                                    <img src="http://www.raphaelfabeni.com.br/rv/images/nike-logo.png" alt="Logo"/>
+                                </figure>
                             </a>
                         </div>
                         <div className="item-Header nav-bar">
@@ -23,7 +26,7 @@ var Header = React.createClass({
                         </div>
                     </div>
                     <div className="banner">
-                        <img src="http://www.raphaelfabeni.com.br/rv/images/banner.png" alt="Main Banner"/>
+                        <img src={banner} alt="Main Banner"/>
                     </div>
                 </div>
             </header>

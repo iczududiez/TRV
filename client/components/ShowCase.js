@@ -35,4 +35,8 @@ var ShowCase = React.createClass({
     }
 });
 
+ShowCase.propTypes = {
+    products: React.PropTypes.array.isRequired
+}
+
 export default ShowCase;

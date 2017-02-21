@@ -10,7 +10,8 @@ var Body = React.createClass({
     getInitialState(){
         return {
             products:null,
-            filters:[]
+            filters:[],
+            message:null
         }
     },
     componentDidUpdate (){
@@ -21,9 +22,14 @@ var Body = React.createClass({
         //Or var self = this;
 
         ProductService.getProducts().then(function(response){
-            this.setState({products:response.data});
-            FilterLogic.itemArray = JSON.parse(JSON.stringify(response.data));//Cloning Object
-            //self.setState...
+            if(response){
+                this.setState({products:response.data});
+                FilterLogic.itemArray = Object.assign({}, response.data);//Cloning Object
+                Object.assign
+                //self.setState...
+            }else{
+                this.setState({message:"Não encontramos nenhum produto. :/"});
+            }
         }.bind(this));
     },
     setFilter(event){
@@ -38,7 +44,6 @@ var Body = React.createClass({
             FilterLogic.removeFilter(elem.getAttribute('name'), elem.value);
         }
 
-
         for(var prop in productFilter){
             productFilter[prop] = FilterLogic.filterLogic(prop);
         }
@@ -49,17 +54,25 @@ var Body = React.createClass({
 
         var showCases = Object.getOwnPropertyNames(this.state.products || {}).map(function(item, key){
             return <ShowCase 
-                     key={key.toString()}
+                     key={key}
                      products={this.state.products[item]}
                      name={item}/>
         }.bind(this));
 
-        return(
+        var returnHTML = showCases.length ?
+                        (<div className="row">
+                            <Filter filterFunc={this.setFilter}/>
+                            {showCases}
+                        </div>) :
+                        (<div className="row">
+                            <div className="message">
+                                <h2>{this.state.message}</h2>
+                            </div>
+                        </div>);
+
+        return (
             <section className="body">
-                <div className="row">
-                    <Filter filterFunc={this.setFilter}/>
-                    {showCases}
-                </div>
+                {returnHTML}
             </section>
         )
     }

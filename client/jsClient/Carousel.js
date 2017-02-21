@@ -18,7 +18,7 @@ var Carousel = {
             var itensControl = getChildrensByClass(getChildrensByClass(elem,'carousel-control'),"item-control");
             var elemActive = getChildrensByClass(itensControl[0] ? itensControl[0].parentElement : null, "active")[0];
             var itemWidth = itens[0].clientWidth;
-            var marginItem = Math.ceil((elem.clientWidth - (itemWidth * 4)) / 3);
+            var marginItem = Math.ceil((elem.clientWidth - (itemWidth * 4)) / 3) - 3;
             var startMargin = elemActive && elemActive.getAttribute("carControl") ? 
                             ((itemWidth + marginItem) * parseInt(elemActive.getAttribute("carControl"))) * -1 :
                             0;

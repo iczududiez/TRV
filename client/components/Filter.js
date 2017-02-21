@@ -1,7 +1,7 @@
 import React from 'react';
 import BtnAllProducts from './BtnAllProducts';
 
-var Filtro = React .createClass({
+var Filter = React.createClass({
 
     render(){
         return (
@@ -43,7 +43,10 @@ var Filtro = React .createClass({
             </div>
         )
     }
+});
 
-})
+Filter.propTypes = {
+    filterFunc: React.PropTypes.func.isRequired,
+}
 
-export default Filtro;
+export default Filter;
