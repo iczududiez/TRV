@@ -50,8 +50,6 @@ table {
   border-spacing: 0; }
 
 /* RESET CSS */
-/** Variaveis **/
-/** Mixin **/
 /** ELEMENTS **/
 a {
   text-decoration: none;
@@ -378,6 +376,13 @@ a.btn-buy {
   .product img {
     height: 120px; } }
 /* MEDIA */
+@-moz-document url-prefix() {
+  .product {
+    padding: 2% 3% 5%; }
+
+  header .item-Header {
+    padding-top: 15px;
+    margin-bottom: 15px; } }
 /* https://codepen.io/bbodine1/pen/novBm */
 .squaredTwo {
   height: 20px;
