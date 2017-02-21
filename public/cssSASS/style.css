@@ -58,6 +58,9 @@ a {
   color: #000;
   cursor: pointer; }
 
+h3 {
+  margin-bottom: 25px; }
+
 nav .vertical {
   display: flex;
   flex-direction: row; }
@@ -204,6 +207,11 @@ a.btn-buy {
 .banner {
   margin-left: -120px; }
 
+.flex-border {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid #d1d1d1; }
+
 /* BODY */
 /* BODY >> FILTER */
 .filter {
@@ -245,15 +253,18 @@ a.btn-buy {
 
 .product {
   width: 22%;
-  padding: 2% 3% 0%;
+  padding: 1% 3% 1%;
   margin-right: 4%;
   text-align: center; }
-
-.product:hover > .details {
-  margin-top: -20px; }
-
-.product:hover > .details > a.btn {
-  visibility: visible; }
+  .product:hover {
+    border: 1px solid #d1d1d1; }
+  .product:hover > .details > .person {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #d1d1d1; }
+  .product:hover > .details {
+    margin-top: -20px; }
+  .product:hover > .details > a.btn {
+    visibility: visible; }
 
 .product .details {
   text-align: left; }
@@ -357,9 +368,15 @@ a.btn-buy {
   .item-filter span {
     display: inline-block;
     width: 65%; } }
+@media (max-width: 1050px) {
+  .product img {
+    height: 160px; } }
 @media (max-width: 972px) {
   .item-filter {
     width: 25%; } }
+@media (max-width: 920px) {
+  .product img {
+    height: 120px; } }
 /* MEDIA */
 /* https://codepen.io/bbodine1/pen/novBm */
 .squaredTwo {

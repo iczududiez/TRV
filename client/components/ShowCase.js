@@ -16,13 +16,14 @@ var ShowCase = React.createClass({
         
         //Logic for Filter
         var size = this.props.products.length - 3 > 1 ? this.props.products.length - 3: 0;
+        
         for(let i = 0, v = size; i < v; i++){
             carouselControl.push(<span key={i} onClick={this.moveCarousel} className={!i ? "item-control bullet active" : "item-control bullet"}></span>);
         }
 
         return(
             <div className="container container-noFlex">
-                <h3>{UtilResource.translate[this.props.name] || this.props.name.replace(/^(\w)/,function(match){ return match.toUpperCase() })}</h3>
+                <h3>{UtilResource.translate('en-us','pt-br')(this.props.name)}</h3>
                 <div className="carousel">
                     <Products products={this.props.products}/>
                     <menu className="carousel-control">

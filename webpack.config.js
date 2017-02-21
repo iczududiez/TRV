@@ -14,13 +14,11 @@ module.exports = {
                 exclude: '/node_modules/',
                 loader:'babel-loader',
                 query:{
-                    presets:['react']
+                    presets:['react','es2015']
                 }
             },{
-                test: /\.css$/,loader: "style-loader!css-loader",
-                //test: /\.css$/,
-                //loaders: ['css-loader', 'style-loader'],
-                //include: __dirname + '/public/cssSASS/'
+                test: /\.css$/,
+                loader: "style-loader!css-loader",
             },
             {
                 test: /.*\.(gif|png|jpe?g|svg)$/i,
@@ -39,10 +37,6 @@ module.exports = {
                 ],
                 include: path.resolve('./public/image')
             }
-            /*{
-                test: /\.(jpe?g|png|gif|svg)$/i,
-                loader:'url-loader?limit=200000'
-            }*/
         ]
     }
 

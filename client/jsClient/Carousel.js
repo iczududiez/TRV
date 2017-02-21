@@ -1,118 +1,143 @@
-//For test in the development tools
-//var Carousel = {
-Carousel = {
-    memo:{}
-}
+var Carousel = {
+    memo:{},
+    validation:function(){
 
-Carousel.validation = function(){
+        return  !!document.getElementsByClassName('carousel').length &&
+                !!document.getElementsByClassName('carousel-panel').length &&
+                !!document.getElementsByClassName('carousel-item').length &&
+                !!document.getElementsByClassName('carousel-control').length
+    },
+    organizes:function(){
 
-    return  !!document.getElementsByClassName('carousel').length &&
-            !!document.getElementsByClassName('carousel-panel').length &&
-            !!document.getElementsByClassName('carousel-item').length &&
-            !!document.getElementsByClassName('carousel-control').length
+        if(!this.validation()){ this.removeAllCarousel(); return; }
 
-}
+        function organization(elem, key){
 
-Carousel.organizes = function(){
+            elem.setAttribute("carouselKey",key);
+            var itens = getChildrensByClass(getChildrensByClass(elem,'carousel-panel'),"carousel-item");
+            var itensControl = getChildrensByClass(getChildrensByClass(elem,'carousel-control'),"item-control");
+            var elemActive = getChildrensByClass(itensControl[0] ? itensControl[0].parentElement : null, "active")[0];
+            var itemWidth = itens[0].clientWidth;
+            var marginItem = Math.ceil((elem.clientWidth - (itemWidth * 4)) / 3);
+            var startMargin = elemActive && elemActive.getAttribute("carControl") ? 
+                            ((itemWidth + marginItem) * parseInt(elemActive.getAttribute("carControl"))) * -1 :
+                            0;
 
-    if(!this.validation()){ return; }
+            function itemMargin(item, index){
+                    item.setAttribute("style","margin-left:" + (startMargin + ((itemWidth + marginItem) * index)) + "px;");  
+            }
 
-    function organization(elem, key){
+            itens.map(itemMargin);
+            itensControl.map(function (item, key) {
+                item.setAttribute("carControl", key);
+            });
 
-        elem.setAttribute("carouselKey",key);
-        var itens = getChildrensByClass(getChildrensByClass(elem,'carousel-panel'),"carousel-item");
-        var itensControl = getChildrensByClass(getChildrensByClass(elem,'carousel-control'),"item-control");
-        var elemActive = getChildrensByClass(itensControl[0] ? itensControl[0].parentElement : null, "active")[0];
-        var itemWidth = itens[0].clientWidth;
-        var marginItem = (elem.clientWidth - (itemWidth * 4)) / 3;
-        var startMargin = elemActive && elemActive.getAttribute("carControl") ? 
-                          (((itemWidth + marginItem) * (parseInt(elemActive.getAttribute("carControl")) + 1)) * -1) :
-                          0;
-
-        function itemMargin(item, index){
-                item.setAttribute("style","margin-left:" + (startMargin + ((itemWidth + marginItem) * index)) + "px;");  
+            this.memo[key] = {"itens":itens,
+                            "itensControl":itensControl,
+                            "itemWidth":itemWidth,
+                            "marginItem":marginItem,
+                            "totalWidth":(itemWidth + marginItem),
+                            "lastActiveElem":null,
+                            "moving":false,
+                            "changeMoving":{'elemRequest':null,
+                                            'qtdMoves':0,
+                                            'status':'OK'}}
         }
 
-        itens.map(itemMargin);
-        itensControl.map(function (item, key) {
-            item.setAttribute("carControl", key);
-        });
+        var carousels = document.getElementsByClassName('carousel');
 
-        this.memo[key] = {"itens":itens,
-                          "itensControl":itensControl,
-                          "itemWidth":itemWidth,
-                          "marginItem":marginItem,
-                          "lastActiveElem":null,
-                          "moving":false,
-                          "changeMoving":{'elemRequest':null,
-                                          'qtdMoves':0,
-                                          'status':'OK'}}
-    }
+        Array.prototype.map.call(carousels,organization.bind(this));
+    },
+    moveCarousel:function(elem) {
 
-    var carousels = document.getElementsByClassName('carousel');
+        var activeControl = null;
+        var parentCarousel = findParentByClass(elem, 'carousel');
+        var key = parentCarousel.getAttribute("carouselKey");
 
-    Array.prototype.map.call(carousels,organization.bind(this));
-}
+        if(!this.memo[key].moving){
+            var itemSelectedPosition = parseInt(elem.getAttribute("carControl"));
+            var itemACtivePosition = 0;
+            
+            if(this.memo[key].changeMoving.status === 'lastProcess'){
+                var positionLastElem = this.memo[key].lastActiveElem.getAttribute('carControl');
+                var qtdMove = this.memo[key].changeMoving.qtdMoves;
+                activeControl = getSiblingsByAttributeValue(elem, 'carControl', qtdMove > 0 ? qtdMove - positionLastElem : positionLastElem - (qtdMove * -1));
+                this.memo[key].changeMoving.status = "OK";
+                if(!activeControl.length){
+                    addClass(elem, 'active');
+                    getSiblingsElems(elem).map(function(elemSibling){
+                        removeClass(elemSibling,'active');
+                    });
+                }
+            }else{
+                activeControl = getSiblingsByClassName(elem, "active");
+            }
+            
+            if(activeControl.length){
+                itemACtivePosition = parseInt(activeControl[0].getAttribute("carControl"));
+                
 
-Carousel.moveCarousel = function(elem) {
+                this.movementLogic(itemACtivePosition < itemSelectedPosition, itemACtivePosition - itemSelectedPosition, parentCarousel);
+                
 
-    var activeControl = null;
-    var parentCarousel = findParentByClass(elem, 'carousel');
-    var key = parentCarousel.getAttribute("carouselKey");
-
-    if(!this.memo[key].moving){
-        var itemSelectedPosition = parseInt(elem.getAttribute("carControl"));
-        var itemACtivePosition = 0;
-        
-        if(this.memo[key].changeMoving.status === 'lastProcess'){
-            var positionLastElem = this.memo[key].lastActiveElem.getAttribute('carControl');
-            var qtdMove = this.memo[key].changeMoving.qtdMoves;
-            activeControl = getSiblingsByAttributeValue(elem, 'carControl', qtdMove > 0 ? qtdMove - positionLastElem : positionLastElem - (qtdMove * -1));
-            this.memo[key].changeMoving.status = "OK";
-            if(!activeControl.length){
+                this.memo[key].lastActiveElem = activeControl[0];
                 addClass(elem, 'active');
                 getSiblingsElems(elem).map(function(elemSibling){
                     removeClass(elemSibling,'active');
                 });
             }
         }else{
-            activeControl = getSiblingsByClassName(elem, "active");
+            //Apply for future changeMoving Logic
+            //this.memo[key].changeMoving.status = 'require';
+            //this.memo[key].changeMoving.elemRequest = elem;
         }
-        
-        if(activeControl.length){
-            itemACtivePosition = parseInt(activeControl[0].getAttribute("carControl"));
-            
+    },
+    movementLogic:function(direction, moves, elemParent){
+                
+        if(direction){ moves = moves * -1; }
 
-            this.movementLogic(itemACtivePosition < itemSelectedPosition, itemACtivePosition - itemSelectedPosition)(parentCarousel);
-            
-
-            this.memo[key].lastActiveElem = activeControl[0];
-            addClass(elem, 'active');
-            getSiblingsElems(elem).map(function(elemSibling){
-                removeClass(elemSibling,'active');
-            });
-        }
-    }else{
-        this.memo[key].changeMoving.status = 'require';
-        this.memo[key].changeMoving.elemRequest = elem;
-    }
-}
-
-
-Carousel.movementLogic = function(direction,moves){
-
-    if(direction){ moves = moves * -1; }
-
-   // debugger;
-    function move(elemParent){
         var key = elemParent.getAttribute("carouselKey");
-        
-        //debugger;
+
         if(!this.memo[key].moving){
             this.memo[key].moving = true;
             
-            var speed = 3;
-            //var remains = Math.ceil(((this.memo[key].marginItem + this.memo[key].itemWidth) * moves) / 3);
+            var control = 100;
+            var movePerInteract = (this.memo[key].totalWidth * moves) / control;
+            
+            function mapFunc(item, index, itens){
+                var currentStyle = item.getAttribute("style");
+                var currentMargin = parseFloat(currentStyle ? currentStyle.replace(/margin-left:\s?(-?[\.e\d]+)px;/,"$1") : 0)//.toFixed(10);
+                var nextMargin = direction ? 
+                                (Math.round((currentMargin - movePerInteract) * 100) /100) :
+                                (Math.round((currentMargin + movePerInteract) * 100) /100)
+
+                item.setAttribute("style","margin-left:" + nextMargin + "px;");
+            }
+
+            function animationFunc(){
+                //console.log('animate');
+                if(control){
+                    this.memo[key].itens.map(mapFunc);
+                    control--;
+                }else{
+                    clearInterval(animation);
+                    this.memo[key].moving = false;
+                }
+            }
+
+            var animation = setInterval(animationFunc.bind(this),10);
+        }
+    },
+    _movementOldLogic:function(direction, moves, elemParent){
+
+        if(direction){ moves = moves * -1; }
+
+        var key = elemParent.getAttribute("carouselKey");
+        
+        if(!this.memo[key].moving){
+            this.memo[key].moving = true;
+            
+            var control = 100;
             var qtdItensControl = this.memo[key].itensControl.length;
             var movement = (this.memo[key].marginItem + this.memo[key].itemWidth)
             var remains = movement * moves;
@@ -128,24 +153,14 @@ Carousel.movementLogic = function(direction,moves){
 
             function mapFunc(item, index, itens){
                 var currentStyle = item.getAttribute("style");
-                var currentMargin = parseInt(currentStyle ? currentStyle.replace(/margin-left:\s?(-?\d+)px;/,"$1") : 0);
-                var nextMargin = 0;
-
-                if(direction){
-                    nextMargin = (currentMargin - speed)
-                    if(validationMove(currentMargin, index, itens, nextMargin)){
-                        item.setAttribute("style","margin-left:" + nextMargin + "px;");
-                    }else{
-                        remains = 0;
-                    }
-                }else{
-                    nextMargin = (currentMargin + speed);
-                    if(validationMove(currentMargin, index, itens, nextMargin)){
-                        item.setAttribute("style","margin-left:" + nextMargin+ "px;");
-                    }else{
-                        remains = 0;
-                    }
-                }
+                var currentMargin = parseInt(currentStyle ? currentStyle.replace(/margin-left:\s?(-?[\.\d]+)px;/,"$1") : 0);
+                var nextMargin = direction ? (currentMargin - control) : (currentMargin + control);
+                
+                //if(validationMove(currentMargin, index, itens, nextMargin)){
+                    item.setAttribute("style","margin-left:" + nextMargin + "px;");
+                //}else{
+                //    remains = 0;
+               // }
             }
 
             function animationFunc(){
@@ -157,7 +172,7 @@ Carousel.movementLogic = function(direction,moves){
                         this.memo[key].changeMoving.status = 'callMove';
                     }
                     this.memo[key].itens.map(mapFunc);
-                    remains = remains ? remains - speed : remains;
+                    remains = remains ? remains - control : remains;
                 }else{
                     clearInterval(animation);
                     this.memo[key].moving = false;
@@ -170,31 +185,32 @@ Carousel.movementLogic = function(direction,moves){
 
             var animation = setInterval(animationFunc.bind(this),10);
         }
-    }
-    return move.bind(this);
+    },
+    removeAllCarousel:function(){
 
-}
+        var itens = document.getElementsByClassName('carousel-item'); 
+        var carousels = document.getElementsByClassName('carousel');
 
-Carousel.removeAllCarousel = function(){
-
-    var itens = document.getElementsByClassName('carousel-item'); 
-    var carousels = document.getElementsByClassName('carousel');
-
-    for(var i = 0, v = itens.length; i < v; i++){
-        if((i+1) % 4){
-            itens[i].setAttribute("style","");
-        }else{
-            itens[i].setAttribute("style","margin-right:0;");
+        for(var i = 0, v = itens.length; i < v; i++){
+            if((i+1) % 4){
+                itens[i].setAttribute("style","");
+            }else{
+                itens[i].setAttribute("style","margin-right:0;");
+            }
         }
-    }
 
-    while(carousels.length){
-        removeClass(carousels[0],"carousel");
-    }
+        while(carousels.length){
+            removeClass(carousels[0],"carousel");
+        }
 
+    }
 }
 
-/* util Functions */
+window.onresize = function(){
+    Carousel.organizes();
+}
+
+/* DOM nav Functions */
 function getSiblingsByClassName(elem, classSiblingElem){
 
     function filterSiblings(elemSibling){
@@ -264,8 +280,6 @@ function addValueAttribute(elem, attribute, value){
     elem.setAttribute(attribute,elem.getAttribute(attribute).replace(/([\w\W]*)/,"$1 "+value));
 }
 
-
-
 //if elem is array of elems only childrens for the first is return
 function getChildrensByClass(elem, classChildrenElem){
    
@@ -304,11 +318,6 @@ function hasAttributeValue(elem, attribute, haveValue){
                 "\\s" + haveValue + "\\s";
     return new RegExp(regex,'gi').test(elem.getAttribute(attribute));
 }
-
-window.onresize = function(){
-    //debugger;
-    Carousel.organizes();
-    console.log("resize call");
-}
+/* DOM nav Functions */
 
 module.exports = Carousel;
