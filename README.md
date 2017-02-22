@@ -1,5 +1,5 @@
 # TRV
-Criação de Pagina Baseada em Layout.
+Criação de Página Baseada em Layout.
 
 ## Desenvolvido
 Usando Node.JS com Express, React.js com Webpack + Axios e SASS.
