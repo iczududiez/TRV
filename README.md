@@ -11,11 +11,11 @@ Navegue até a raiz do repositório e execute:
     $ npm install
 
 ## Executando o projeto
-Para executar o projeto execute o comando:
+Para executar a aplicação use o comando:
 
     $ npm run start
 
-Obs: É necessario ter o Nodemon instalado globalmente para instalar o mesmo execute:
+Obs: É necessario ter o Nodemon instalado globalmente para executar a aplicação, para instalar o mesmo execute o comando:
 
     $ npm install -g nodemon
 
